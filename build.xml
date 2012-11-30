@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project basedir="." default="build" name="TrainsJNI">
+
+  <description>
+    Compile JNI Java classes and related C libraries
+  </description>
+
+  <property name="src" value="src"/>
+  <property name="bin" value="bin"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the bin directory structure used by compile -->
+    <mkdir dir="${bin}"/>
+  </target>  
+
+  <target name="compile" depends="init" description="compile the source " >
+    <!-- Compile the java code from ${src} into ${bin} -->
+    <javac srcdir="${src}" destdir="${bin}"/>
+  </target>
+
+  <path id="project.classpath">
+    <pathelement location="bin"/>
+  </path>
+
+  <target name="clean">
+    <delete dir="bin"/>
+  </target>		
+
+  <target name="build" depends="compile" 
+    description="compile C libraries and do necessary exports">
+    <exec dir="." executable="/bin/sh">
+      <arg line="script.sh"/>
+    </exec>
+  </target>    
+</project>
+
