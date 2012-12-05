@@ -3,7 +3,7 @@
 <project basedir="." default="build" name="TrainsProtocolJava">
 
   <description>
-    Compile JNI Java classes and related C libraries
+    Compile JNI Java classes and related C libraries for the trains protocol
   </description>
 
   <property name="src" value="src"/>
