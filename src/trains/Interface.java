@@ -16,7 +16,7 @@ public class Interface {
 	
 	// Static factory for TrainsInterface
 	public static Interface trainsInterface(){
-		System.loadLibrary("Interface");
+		System.loadLibrary("trains");
 		Interface trainsInterface = new Interface();
 		return trainsInterface;
 	}
