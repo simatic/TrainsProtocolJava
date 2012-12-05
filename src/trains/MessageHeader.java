@@ -19,7 +19,7 @@ public class MessageHeader {
 		this.len = len;
 	}
 
-	public static seType(String type){
+	public void setType(String type){
 		this.type = type;
 	}
 }
