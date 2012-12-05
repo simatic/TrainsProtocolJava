@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project basedir="." default="build" name="TrainsJNI">
+<project basedir="." default="build" name="TrainsProtocolJava">
 
   <description>
     Compile JNI Java classes and related C libraries
