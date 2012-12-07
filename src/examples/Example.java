@@ -1,30 +1,39 @@
-package tests;
+package examples;
 
 import static org.junit.Assert.*;
 import junit.framework.Assert;
 
 import org.junit.Test;
+
 import trains.Interface;
 import trains.CallbackCircuitChange;
 import trains.CallbackUtoDeliver;
 
-import tests.myCallbackCircuitChange;
-import tests.myCallbackUtoDeliver;
 
-public class TestInterface {
+public class Example {
 	
 	@Test
 	public void TestInterface() {
 		
 		int exitcode;
-		/* test with random values */
+		
+		//Parameters set by user
+		boolean sender;
+		int nbMemberMin;
+		int delay;
+		int nbRecMsg;
+		
+		//trInit parameters
 		int trainsNumber = 2;
 		int wagonLength = 3;
 		int waitNb = 4;
 		int waitTime = 2;
+		
+		//Error check
 		int status = 0;
 		int errnum = 0;
 	
+		
 		
 		Interface trin = Interface.trainsInterface();
 		

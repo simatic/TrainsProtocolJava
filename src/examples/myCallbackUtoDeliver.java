@@ -1,4 +1,4 @@
-package tests;
+package examples;
 
 import trains.CallbackUtoDeliver;
 import trains.Message;
