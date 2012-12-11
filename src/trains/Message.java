@@ -26,7 +26,7 @@ public class Message {
 	public static Message messageFromPayload(String payload){
 		//do something
 		int type = MessageType.AM_BROADCAST.ordinal();
-		MessageHeader msgHdr = new MessageHeader(payload.length(), type);
+		MessageHeader msgHdr = MessageHeader.createMessageHeader(payload.length(), type);
 		return new Message(msgHdr, payload);		
 	}
 
