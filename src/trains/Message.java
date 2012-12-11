@@ -17,8 +17,15 @@ public class Message {
 		return new Message(messageHeader, payload);
 	}
 	
-	public static Message messageFromPayload(String payload, int type){
+	public static Message messageFromPayloadAndType(String payload, int type){
 		//do something
+		MessageHeader msgHdr = new MessageHeader(payload.length(), type);
+		return new Message(msgHdr, payload);		
+	}
+	
+	public static Message messageFromPayload(String payload){
+		//do something
+		int type = MessageType.AM_BROADCAST.ordinal();
 		MessageHeader msgHdr = new MessageHeader(payload.length(), type);
 		return new Message(msgHdr, payload);		
 	}
