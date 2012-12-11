@@ -8,6 +8,8 @@
 
   <property name="src" value="src"/>
   <property name="bin" value="bin"/>
+  <property name="trains" value="src/trains"/>
+  <property name="examples" value="src/examples"/>
 
   <target name="init">
     <!-- Create the time stamp -->
@@ -16,9 +18,16 @@
     <mkdir dir="${bin}"/>
   </target>  
 
-  <target name="compile" depends="init" description="compile the source " >
-    <!-- Compile the java code from ${src} into ${bin} -->
-    <javac srcdir="${src}" destdir="${bin}"/>
+  <target name="all">
+    <antcall target="clean"/>
+    <antcall target="build"/>
+    <antcall target="run"/>
+  </target>
+	
+  <target name="build" depends="init" description="compile the source " >
+    <antcall target="build-trains"/>
+    <antcall target="build-jar"/>
+    <antcall target="build-examples"/>
   </target>
 
   <path id="project.classpath">
@@ -26,14 +35,40 @@
   </path>
 
   <target name="clean">
-    <delete dir="bin"/>
+    <delete dir="${bin}"/>
   </target>		
-
-  <target name="build" depends="compile" 
-    description="compile C libraries and do necessary exports">
+	
+  <target name="build-trains" description="Build trains jar">
     <exec dir="." executable="/bin/sh">
       <arg line="script.sh"/>
     </exec>
-  </target>    
+  	<javac srcdir="${trains}"
+ 	  destdir="${bin}"
+  	  includes="CallbackCircuitChange.java, CallbackUtoDeliver.java, CircuitView.java,
+  					Interface.java, Message.java, MessageHeader.java, MessageType.java"/>
+  </target> 
+		
+  <target name="build-jar" description="Build jar archive" >
+    <jar destfile="${bin}/TrainsProtocol.jar"
+     basedir="${bin}"
+     includes="${bin}/trains"/>
+  </target>
+  	
+  <target name="build-examples" 
+    description="Build examples">
+      <javac classpath="${bin}/TrainsProtocol.jar:."
+       srcdir="${examples}"
+  	   destdir="${bin}"
+   	   includes="Example.java"/>
+  </target> 	 	
+  	
+  <target name="run" description="run Java examples">
+	  <java fork="on"
+	  	classpath="${bin}:."
+	    failonerror="true"
+	    classname="examples.Example">
+	  </java>
+  </target>
+	
 </project>
 
