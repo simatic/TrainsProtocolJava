@@ -25,4 +25,12 @@ public class MessageHeader {
 	public void setType(int type){
 		this.type = (char) type;
 	}
+	
+	public int getLen(){
+		return this.len;
+	}
+
+	public int getType(){
+		return (int)this.type;
+	}
 }
