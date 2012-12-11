@@ -7,13 +7,14 @@ public class MessageHeader {
 	//type of message -> enum AM_BROADCAST, AM_ARRIVAL or A_DEPARTURE
 	private String type;
 	
-	private MessageHeader(){
-		//do something
+	public MessageHeader(int len, String type){
+		this.len = len;
+		this.type = type;
 	}
 	
-	public static void MessageHeader(){
-		//do something
-	}
+	/*public static MessageHeader createMessageHeader(int len, String type){
+		return new MessageHeader(len, type);
+	}*/
 
 	public void setLen(int len){
 		this.len = len;
