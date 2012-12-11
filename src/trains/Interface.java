@@ -11,6 +11,7 @@ public class Interface {
 	
 	public native void trPerror(int errnum);
 	public native int trTerminate();
+	public native int newsmsg(int payloadSize);
 	public native int utoBroadcast(Message msg);
 
 	
@@ -45,6 +46,11 @@ public class Interface {
 	
 	public int JtrTerminate(){
 		int exitcode = this.trTerminate();
+		return exitcode;
+	}
+	
+	public int JnewMsg(int payloadSize){
+		int exitcode = this.newsmsg(payloadSize);
 		return exitcode;
 	}
 	
