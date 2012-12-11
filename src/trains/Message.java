@@ -17,7 +17,7 @@ public class Message {
 		return new Message(messageHeader, payload);
 	}
 	
-	public static Message messageFromPayload(String payload, String type){
+	public static Message messageFromPayload(String payload, int type){
 		//do something
 		MessageHeader msgHdr = new MessageHeader(payload.length(), type);
 		return new Message(msgHdr, payload);		

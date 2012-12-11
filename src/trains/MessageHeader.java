@@ -4,10 +4,9 @@ public class MessageHeader {
 
 	//length of the whole message
 	private int len;
-	//type of message -> enum AM_BROADCAST, AM_ARRIVAL or A_DEPARTURE
-	private String type;
+	private int type;
 	
-	public MessageHeader(int len, String type){
+	public MessageHeader(int len, int type){
 		this.len = len;
 		this.type = type;
 	}
@@ -20,7 +19,7 @@ public class MessageHeader {
 		this.len = len;
 	}
 
-	public void setType(String type){
+	public void setType(int type){
 		this.type = type;
 	}
 }
