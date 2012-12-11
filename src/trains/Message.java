@@ -32,4 +32,12 @@ public class Message {
 	public void setPayload(String payload){
 		this.payload = payload;
 	}
+	
+	public MessageHeader getMessageHeader(){
+		return this.messageHeader;
+	}
+
+	public String getPayload(){
+		return this.payload;
+	}
 }
