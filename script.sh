@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# init the environment by setting up C_INCLUDE_PATH
+# the configuration of JAVA_HOME is not enough because some Train protocol Makefiles do not explicitly used this parameters for compile
+# and this variable will be used for other applications beside this script, so export keyword is needed
+# TODO: auto detection of include folders
+export C_INCLUDE_PATH=/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/:/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/linux:.
+
+# store init path
+InitPath=`pwd`
+
 CPath="./TrainsProtocol"
 
 echo "Generating C JNI libraries"
@@ -13,20 +22,38 @@ mv ./src/trains_Interface.h $CPath/include/trains_Interface.h
 echo "compiling interface.o"
 cd $CPath/src 
 
-#Ok if we're compiling on Mac OS X 
-#TODO: testing OS 
-#gcc -x c -I$CPath/include -I/System/Library/Frameworks/JavaVM.framework/Headers -c interface.c -o interface.o
-#echo "compiling libInterface.jnilib"
-#gcc -dynamiclib -o libInterface.jnilib interface.o 
+#TODO: works on Debian, need to check if it works for Mac
+#Ref: http://en.wikipedia.org/wiki/Uname
+OSName=`uname -s`
 
-#Compiling on Linux
-#gcc -I$JAVA_HOME/include -o libInterface.so -shared interface.c
-make all
+if [ "$OSName" = "Linux" ]
+then
+	#Compiling on Linux
+	#gcc -I$JAVA_HOME/include -o libInterface.so -shared interface.c
+	make all
+else
+	if [ "$OSName" = "Darwin" ]
+	then
+		echo "compile on Mac OS X"
+		#Ok if we're compiling on Mac OS X 
+		#gcc -x c -I$CPath/include -I/System/Library/Frameworks/JavaVM.framework/Headers -c interface.c -o interface.o
+		#echo "compiling libInterface.jnilib"
+		#gcc -dynamiclib -o libInterface.jnilib interface.o 
+	fi
+fi
+
 if [ ! -d ../lib ]
 then
 	mkdir ../lib
 fi
 mv libtrains.so ../lib
-LD_LIBRARY_PATH=../lib:LD_LIBRARY_PATH
 
+# update LD_LIBARAY_PATH which is also java.library.path
+LibPath=$(cd ../lib; pwd)
+LD_LIBRARY_PATH=$LibPath:$LD_LIBRARY_PATH
+
+# go back to the init folder
+cd $InitPath
+
+# The following code will close console window. => so should use sh script instead of . script?
 exit 0;
