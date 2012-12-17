@@ -42,7 +42,7 @@ public class Example {
 		}
 	}
 	
-	public static void main() {	
+	public static void main(String args[]) {	
 		
 		//trInit parameters: values by default
 		int trainsNumber = 0;
