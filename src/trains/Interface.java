@@ -11,13 +11,14 @@ public class Interface {
 	
 	public native void trPerror(int errnum);
 	public native int trTerminate();
-	public native int newsmsg(int payloadSize);
+	public native int newmsg(int payloadSize);
 	public native int utoBroadcast(Message msg);
-
+	private static native void initIDs();
 	
 	// Static factory for TrainsInterface
 	public static Interface trainsInterface(){
 		System.loadLibrary("trains");
+		initIDs();
 		Interface trainsInterface = new Interface();
 		return trainsInterface;
 	}
@@ -50,14 +51,13 @@ public class Interface {
 	}
 	
 	public int JnewMsg(int payloadSize){
-		int exitcode = this.newsmsg(payloadSize);
+		int exitcode = this.newmsg(payloadSize);
 		return exitcode;
 	}
 	
 	public int JutoBroadcast(Message msg){
 		int exitcode = this.utoBroadcast(msg);			
 		return exitcode;
-	}
-	
+	}	
 }
 	
