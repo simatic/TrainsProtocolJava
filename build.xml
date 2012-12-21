@@ -39,13 +39,13 @@
   </target>		
 	
   <target name="build-trains" description="Build trains jar">
+    <javac srcdir="${trains}"
+ 	   destdir="${bin}"
+  	   includes="CallbackCircuitChange.java, CallbackUtoDeliver.java, CircuitView.java,
+  					Interface.java, Message.java, MessageHeader.java, MessageType.java"/>
     <exec dir="." executable="/bin/sh">
       <arg line="script.sh"/>
     </exec>
-  	<javac srcdir="${trains}"
- 	  destdir="${bin}"
-  	  includes="CallbackCircuitChange.java, CallbackUtoDeliver.java, CircuitView.java,
-  					Interface.java, Message.java, MessageHeader.java, MessageType.java"/>
   </target> 
 		
   <target name="build-jar" description="Build jar archive" >
