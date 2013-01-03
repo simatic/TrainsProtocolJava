@@ -13,14 +13,22 @@ public class Interface {
 	public native int trTerminate();
 	public native int newmsg(int payloadSize);
 	public native int utoBroadcast(Message msg);
-	private static native void initIDs();
+	private static native void initIDsMessageHeader();
+	private static native void initIDsMessage();
+	private static native void initIDsCircuitView();	
 	
 	// Static factory for TrainsInterface
 	public static Interface trainsInterface(){
 		System.loadLibrary("trains");
-		initIDs();
 		Interface trainsInterface = new Interface();
+		initIDs();
 		return trainsInterface;
+	}
+	
+	public static void initIDs(){
+		initIDsMessageHeader();
+		initIDsMessage();
+		initIDsCircuitView();
 	}
 	
 	//method to call native method trInit()
