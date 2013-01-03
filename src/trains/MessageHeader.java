@@ -14,9 +14,9 @@ public class MessageHeader {
 		this.type = (char) type;
 	}
 	
-	public static MessageHeader createMessageHeader(int len, int type){
+	/*public static MessageHeader createMessageHeader(int len, int type){
 		return new MessageHeader(len, type);
-	}
+	}*/
 
 	public void setLen(int len){
 		this.len = len;
