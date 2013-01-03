@@ -15,7 +15,7 @@ echo "Generating C JNI libraries"
 cd ./src
 
 echo "generating trains_Interface.h"
-#javac trains/Interface.java
+javac trains/Interface.java
 javah -jni trains.Interface
 cd ..
 cp ./src/trains_Interface.h $CPath/include/trains_Interface.h
