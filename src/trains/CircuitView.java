@@ -1,19 +1,20 @@
 package trains;
 
+import java.util.HashMap;
+
 public class CircuitView {
 
 	/* Singleton with static factory */
 	private static final CircuitView CIRCUITVIEW = new CircuitView(0, 0, 0);
 	
 	private int nmemb; 				/* Number of members */
-	//XXX: should use an Array here
-	private int members_address;	/* List of members */
+	private HashMap<Integer,Integer> members;	/* List of members */
 	private int joined; 			/* New member */
 	private int departed; 			/* Departed member*/
 	
 	private CircuitView(int memb, int joined, int departed){
 		this.nmemb = memb;
-		this.members_address = members_address;
+		this.members = new HashMap<Integer,Integer>(/* default initial capacity at 16 */);
 		this.joined = joined;
 		this.departed = departed;
 	}
@@ -21,13 +22,13 @@ public class CircuitView {
 	public static CircuitView getInstance(){
 		return CIRCUITVIEW;
 	}
-
+	
 	public void setMemb(int memb){
 		this.nmemb = memb;
 	}
 
-	public void setMembersAddress(int addr){
-		this.members_address = addr;
+	public void setMembersAddress(int rank, int addr){
+		this.members.put(rank, addr);
 	}
 
 	public void setJoined(int joined){
@@ -42,8 +43,8 @@ public class CircuitView {
 		return this.nmemb;
 	}
 
-	public int getMembersAddress(){
-		return this.members_address;
+	public int getMembersAddress(int rank){
+		return this.members.get(rank).intValue();
 	}
 
 	public int getJoined(){
