@@ -15,9 +15,10 @@ echo "Generating C JNI libraries"
 cd ./src
 
 echo "generating trains_Interface.h"
+#javac trains/Interface.java
 javah -jni trains.Interface
 cd ..
-mv ./src/trains_Interface.h $CPath/include/trains_Interface.h
+cp ./src/trains_Interface.h $CPath/include/trains_Interface.h
 
 echo "compiling interface.o"
 cd $CPath/src 
@@ -54,6 +55,3 @@ LD_LIBRARY_PATH=$LibPath:$LD_LIBRARY_PATH
 
 # go back to the init folder
 cd $InitPath
-
-# The following code will close console window. => so should use sh script instead of . script?
-exit 0;
