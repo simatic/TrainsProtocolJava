@@ -70,7 +70,7 @@ public class Example {
 			return;
 		}
 		
-		payload = 3;
+		/*payload = 3;
 		
 		//Filling the message
 		System.out.println("** Filling a message");
@@ -88,8 +88,8 @@ public class Example {
 			return;
 		}
 		
-		System.out.println("JtrTerminate");
-		exitcode = trin.JtrTerminate();
+		System.out.println("** JtrTerminate");
+		exitcode = trin.JtrTerminate();*/
 		return;
 	}
 }
