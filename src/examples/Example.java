@@ -52,9 +52,6 @@ public class Example {
 		int waitNb = 0;
 		int waitTime = 0;
 		
-		//myCallbackCircuitChange mycallbackCircuit = new myCallbackCircuitChange();
-		//myCallbackUtoDeliver mycallbackUto = new myCallbackUtoDeliver();
-		
 		int payload = 0;
 		Message msg = null;
 		int exitcode;
@@ -64,8 +61,6 @@ public class Example {
 				
 		System.out.println("** trInit");
 		exitcode = trin.JtrInit(trainsNumber, wagonLength, waitNb, waitTime,
-					//mycallbackCircuit.getClass().getName(), 
-					//mycallbackUto.getClass().getName());
 					myCallbackCircuitChange.class.getName(), 
 					myCallbackUtoDeliver.class.getName());
 
