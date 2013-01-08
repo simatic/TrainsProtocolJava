@@ -4,7 +4,7 @@ import trains.*;
 
 public class Example {
 	
-	private static final class myCallbackCircuitChange implements CallbackCircuitChange{
+	public static class myCallbackCircuitChange implements CallbackCircuitChange{
 				
 		public myCallbackCircuitChange(){
 			//Nothing to do
@@ -26,7 +26,7 @@ public class Example {
 		}
 	}
 	
-	private static final class myCallbackUtoDeliver implements CallbackUtoDeliver{
+	public static class myCallbackUtoDeliver implements CallbackUtoDeliver{
 		
 		public myCallbackUtoDeliver(){
 			//Nothing to do
@@ -50,8 +50,8 @@ public class Example {
 		int waitNb = 0;
 		int waitTime = 0;
 		
-		myCallbackCircuitChange mycallbackCircuit = new myCallbackCircuitChange();
-		myCallbackUtoDeliver mycallbackUto = new myCallbackUtoDeliver();
+		//myCallbackCircuitChange mycallbackCircuit = new myCallbackCircuitChange();
+		//myCallbackUtoDeliver mycallbackUto = new myCallbackUtoDeliver();
 		
 		int payload = 0;
 		Message msg = null;
@@ -62,8 +62,10 @@ public class Example {
 				
 		System.out.println("** trInit");
 		exitcode = trin.JtrInit(trainsNumber, wagonLength, waitNb, waitTime,
-					mycallbackCircuit.getClass().getName(), 
-					mycallbackUto.getClass().getName());
+					//mycallbackCircuit.getClass().getName(), 
+					//mycallbackUto.getClass().getName());
+					myCallbackCircuitChange.class.getName(), 
+					myCallbackUtoDeliver.class.getName());
 
 		if (exitcode < 0){
 			System.out.println("JtrInit failed.");
