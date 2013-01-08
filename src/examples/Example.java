@@ -13,12 +13,13 @@ public class Example {
 		@Override
 		public void run(CircuitView cv){
 			//Printing the circuit modification
-			
+			System.out.println("in circuit change callback");
+
 			//Printing the new/departed participant
 			if(cv.getJoined() != 0){
-				System.out.println(Integer.toString(cv.getJoined()) + "has arrived.");
+				System.out.println(Integer.toString(cv.getJoined()) + " has arrived.");
 			} else {
-				System.out.println(Integer.toString(cv.getDeparted()) + "is gone.");
+				System.out.println(Integer.toString(cv.getDeparted()) + " is gone.");
 			}
 			
 			//Printing the current number of members
@@ -34,7 +35,8 @@ public class Example {
 		
 		@Override
 		public void run(int sender, Message msg){
-			
+			System.out.println("in uto deliver callback");
+
 			//Printing the message sender and the content upon receiving a message
 			System.out.println("I received a message from " + sender);
 			System.out.println("The content size is " + msg.getMessageHeader().getLen());
