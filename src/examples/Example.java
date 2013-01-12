@@ -93,8 +93,17 @@ public class Example {
 		terminate = false;
 
 		//Semaphores initialization
-		semWaitEnoughMembers = new Semaphore(maxConcurrentRequests);
-		semWaitToDie = new Semaphore(maxConcurrentRequests);
+		semWaitEnoughMembers = new Semaphore(maxConcurrentRequests, true);
+		semWaitToDie = new Semaphore(maxConcurrentRequests, true);
+		
+		try {
+			semWaitEnoughMembers.acquire();
+			System.out.println("semWaitEnoughMembers acquired in main");
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		System.out.println("** Load interface");
 		Interface trin = Interface.trainsInterface();
