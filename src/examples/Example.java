@@ -1,6 +1,8 @@
 package examples;
 
 import trains.*;
+
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.Semaphore;
 
 public class Example {
@@ -39,8 +41,6 @@ public class Example {
 			if (cv.getMemb() >= nbMemberMin){
 				System.out.println("!!! ******** enough members to start utoBroadcasting\n");
 				semWaitEnoughMembers.release();
-				//System.out.println("semWaitEnoughMemebers released");
-
 			}
 		}
 	}
@@ -54,21 +54,14 @@ public class Example {
 		@Override
 		public void run(int sender, Message msg){
 
-			System.out.println("Payload size is " + msg.getPayload().length() + " //" + Integer.SIZE);
-
-			if (msg.getPayload().getBytes().length != Integer.SIZE){
-				System.out.println("Payload size is incorrect: it is " + msg.getPayload().length() + " when it should be " + Integer.SIZE);
-				return;
-			}
-
 			nbRecMsg++;
-			System.out.println(nbRecMsg + " " + nbRecMsgBeforeStop);
+			//System.out.println(nbRecMsg + " " + nbRecMsgBeforeStop);
 			if (nbRecMsg >= nbRecMsgBeforeStop) {
 				terminate = true;
 				semWaitToDie.release();
-				System.out.println("semWaitToDie released in UtoDeliver");
+				//System.out.println("semWaitToDie released in UtoDeliver");
 			}
-
+			
 			System.out.println("!!! " + nbRecMsg + "-ieme message (recu de " + sender + " / contenu = " + msg.getPayload() + ")");
 		}
 	}
@@ -90,9 +83,9 @@ public class Example {
 
 		// Test parameters
 		sender = true;
-		nbMemberMin = 2;
+		nbMemberMin = 3;
 		delayBetweenTwoUtoBroadcast = 1000;
-		nbRecMsgBeforeStop = 2;
+		nbRecMsgBeforeStop = 10;
 		terminate = false;
 
 		//Semaphores initialization
@@ -101,7 +94,7 @@ public class Example {
 		
 		try {
 			semWaitEnoughMembers.acquire();
-			System.out.println("semWaitEnoughMembers acquired in main");
+			//System.out.println("semWaitEnoughMembers acquired in main");
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -123,7 +116,7 @@ public class Example {
 
 		try {
 			semWaitEnoughMembers.acquire();
-			System.out.println("semWaitEnoughMembers acquired in main");
+			//System.out.println("semWaitEnoughMembers acquired in main");
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -131,32 +124,39 @@ public class Example {
 		}
 
 		if (sender){
-			//while (!terminate) {
-			for(i=0; i < 2; i++){
-			//Filling the message
+			while (!terminate) {
+			    //Filling the message
 				//System.out.println("** Filling a message");
+				
 				payload = rankMessage;
-				msg = Message.messageFromPayload(String.valueOf(payload));
+				try {
+					msg = Message.messageFromPayload(String.valueOf(payload).getBytes("UTF-16LE"));
+					
+					if (msg == null){
+						System.out.println("Creating a message failed.");
+						return;
+					}
+					
+					//System.out.println("Payload: " + msg.getPayload());
+					
+					//Needed to keep count of the messages
+					//System.out.println("** JnewMsg");
+					trin.Jnewmsg(msg.getPayload().length, msg.getPayload());
+					
+					rankMessage++;
 
-				if (msg == null){
-					System.out.println("Creating a message failed.");
-					return;
+					//Sending the message
+				    //System.out.println("** JutoBroadcast");
+					exitcode = trin.JutoBroadcast(msg);
+					if (exitcode < 0){
+						System.out.println("JutoBroadcast failed.");
+						return;
+					}
+				} catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-
-				//Needed to keep count of the messages
-				//System.out.println("** JnewMsg");
-				trin.Jnewmsg(msg.getPayload().length());
-
-				rankMessage++;
-
-				//Sending the message
-			    System.out.println("** JutoBroadcast");
-				exitcode = trin.JutoBroadcast(msg);
-				if (exitcode < 0){
-					System.out.println("JutoBroadcast failed.");
-					return;
-				}
-
+			
 				try {
 					Thread.sleep(delayBetweenTwoUtoBroadcast);
 				} catch (InterruptedException e) {
@@ -166,11 +166,11 @@ public class Example {
 			}
 			terminate = true;
 			semWaitToDie.release();
-			System.out.println("semWaitToDie released in UtoDeliver");
+			//System.out.println("semWaitToDie released in UtoDeliver");
 		} else {
 			try {
 				semWaitToDie.acquire();
-				System.out.println("semWaitToDie acquired in main");
+				//System.out.println("semWaitToDie acquired in main");
 
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -186,6 +186,7 @@ public class Example {
 			System.out.println("JtrTerminate failed.");
 			return;
 	    }
+		System.out.println("\n*********************\n");
 
 		System.exit(0);
 		//return;

@@ -11,7 +11,7 @@ public class Interface {
 	
 	public native void trPerror(int errnum);
 	public native int trTerminate();
-	public native int newmsg(int payloadSize);
+	public native int newmsg(int payloadSize, byte[] payload);
 	public native int utoBroadcast(Message msg);
 	private static native void initIDsMessageHeader();
 	private static native void initIDsMessage();
@@ -58,10 +58,10 @@ public class Interface {
 		return exitcode;
 	}
 	
-	public int Jnewmsg(int payloadSize){
-		int exitcode = this.newmsg(payloadSize);
-		return exitcode;
-	}
+	public int Jnewmsg(int payloadSize, byte[] payload){
+		int pointer_addr = this.newmsg(payloadSize, payload);
+		return pointer_addr;
+		}
 	
 	public int JutoBroadcast(Message msg){
 		int exitcode = this.utoBroadcast(msg);			

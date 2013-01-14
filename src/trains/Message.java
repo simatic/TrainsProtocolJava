@@ -3,30 +3,30 @@ package trains;
 public class Message {
 
 	private MessageHeader messageHeader;
-	private String payload;
+	private byte[] payload;
 
 	/* Is there a single Message object in the JVM -> no: 
 	 * 1 created/sent/used by the user
 	 * the 1 that's inside the process (utoDeliveries) 
 	 *  */
 	
-	public Message(MessageHeader msgHdr, String payload){
+	public Message(MessageHeader msgHdr, byte[] payload){
 		this.messageHeader = msgHdr;
 		this.payload = payload;
 	}
 
-	public /*static*/ Message createMessage(MessageHeader messageHeader, String payload){
+	public /*static*/ Message createMessage(MessageHeader messageHeader, byte[] payload){
 		return new Message(messageHeader, payload);
 	}
 	
-	public /*static*/ Message messageFromPayloadAndType(String payload, int type){
-		MessageHeader msgHdr = new MessageHeader(payload.length(), type);
+	public /*static*/ Message messageFromPayloadAndType(byte[] payload, int type){
+		MessageHeader msgHdr = new MessageHeader(payload.length, type);
 		return new Message(msgHdr, payload);		
 	}
 	
-	public static Message messageFromPayload(String payload){
+	public static Message messageFromPayload(byte[] payload){
 		int type = MessageType.AM_BROADCAST.ordinal();
-		MessageHeader msgHdr = new MessageHeader(payload.length(), type);
+		MessageHeader msgHdr = new MessageHeader(payload.length, type);
 		return new Message(msgHdr, payload);		
 	}
 
@@ -34,7 +34,7 @@ public class Message {
 		this.messageHeader = msgHdr;
 	}
 
-	public void setPayload(String payload){
+	public void setPayload(byte[] payload){
 		this.payload = payload;
 	}
 	
@@ -42,7 +42,8 @@ public class Message {
 		return this.messageHeader;
 	}
 
-	public String getPayload(){
+	public byte[] getPayload(){
 		return this.payload;
 	}
+	
 }
