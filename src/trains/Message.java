@@ -1,5 +1,7 @@
 package trains;
 
+import java.io.UnsupportedEncodingException;
+
 public class Message {
 
 	private MessageHeader messageHeader;
@@ -44,6 +46,26 @@ public class Message {
 
 	public byte[] getPayload(){
 		return this.payload;
+	}
+	
+	public static byte[] IntToByteArray(int payload){
+
+		try {
+			 byte[] byteArray =  String.valueOf(payload).getBytes("UTF-16LE");
+			 return byteArray;
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
+	}
+	
+	public static byte[] StringToByteArray(String payload){
+		
+		try {
+			 byte[] byteArray =  payload.getBytes("UTF-16LE");
+			 return byteArray;
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
 	}
 	
 }
