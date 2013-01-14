@@ -35,10 +35,11 @@ public class Example {
 				System.out.println(Integer.toString(cv.getDeparted()) + " is gone.)");
 			}
 
+			System.out.println(cv.getMemb() + " // " + nbMemberMin);
 			if (cv.getMemb() >= nbMemberMin){
 				System.out.println("!!! ******** enough members to start utoBroadcasting\n");
 				semWaitEnoughMembers.release();
-				System.out.println("semWaitEnoughMemebers released");
+				//System.out.println("semWaitEnoughMemebers released");
 
 			}
 		}
@@ -53,17 +54,19 @@ public class Example {
 		@Override
 		public void run(int sender, Message msg){
 
-			if (msg.getPayload().length() != Integer.SIZE){
-				System.out.println("Payload size is incorrect: it is " + msg.getPayload().length() + " when it should be" + Integer.SIZE);
+			System.out.println("Payload size is " + msg.getPayload().length() + " //" + Integer.SIZE);
+
+			if (msg.getPayload().getBytes().length != Integer.SIZE){
+				System.out.println("Payload size is incorrect: it is " + msg.getPayload().length() + " when it should be " + Integer.SIZE);
 				return;
 			}
 
 			nbRecMsg++;
+			System.out.println(nbRecMsg + " " + nbRecMsgBeforeStop);
 			if (nbRecMsg >= nbRecMsgBeforeStop) {
 				terminate = true;
 				semWaitToDie.release();
 				System.out.println("semWaitToDie released in UtoDeliver");
-
 			}
 
 			System.out.println("!!! " + nbRecMsg + "-ieme message (recu de " + sender + " / contenu = " + msg.getPayload() + ")");
@@ -89,7 +92,7 @@ public class Example {
 		sender = true;
 		nbMemberMin = 2;
 		delayBetweenTwoUtoBroadcast = 1000;
-		nbRecMsgBeforeStop = 10;
+		nbRecMsgBeforeStop = 2;
 		terminate = false;
 
 		//Semaphores initialization
@@ -120,7 +123,7 @@ public class Example {
 
 		try {
 			semWaitEnoughMembers.acquire();
-			System.out.println("semWaitEnoughMemebers acquired in main");
+			System.out.println("semWaitEnoughMembers acquired in main");
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -128,9 +131,9 @@ public class Example {
 		}
 
 		if (sender){
-			while (!terminate) {
-
-				//Filling the message
+			//while (!terminate) {
+			for(i=0; i < 2; i++){
+			//Filling the message
 				//System.out.println("** Filling a message");
 				payload = rankMessage;
 				msg = Message.messageFromPayload(String.valueOf(payload));
@@ -142,12 +145,12 @@ public class Example {
 
 				//Needed to keep count of the messages
 				//System.out.println("** JnewMsg");
-				trin.JnewMsg(msg.getPayload().length());
+				trin.Jnewmsg(msg.getPayload().length());
 
 				rankMessage++;
 
 				//Sending the message
-			    //System.out.println("** JutoBroadcast");
+			    System.out.println("** JutoBroadcast");
 				exitcode = trin.JutoBroadcast(msg);
 				if (exitcode < 0){
 					System.out.println("JutoBroadcast failed.");
@@ -160,8 +163,10 @@ public class Example {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
 			}
+			terminate = true;
+			semWaitToDie.release();
+			System.out.println("semWaitToDie released in UtoDeliver");
 		} else {
 			try {
 				semWaitToDie.acquire();
@@ -180,8 +185,9 @@ public class Example {
 		if (exitcode < 0){
 			System.out.println("JtrTerminate failed.");
 			return;
-		}
+	    }
 
-		return;
+		System.exit(0);
+		//return;
 	}
 }

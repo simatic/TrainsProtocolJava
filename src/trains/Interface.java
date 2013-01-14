@@ -58,7 +58,7 @@ public class Interface {
 		return exitcode;
 	}
 	
-	public int JnewMsg(int payloadSize){
+	public int Jnewmsg(int payloadSize){
 		int exitcode = this.newmsg(payloadSize);
 		return exitcode;
 	}
