@@ -2,7 +2,6 @@ package examples;
 
 import trains.*;
 
-import java.io.UnsupportedEncodingException;
 import java.util.concurrent.Semaphore;
 
 public class Example {
@@ -61,7 +60,7 @@ public class Example {
 				semWaitToDie.release();
 				//System.out.println("semWaitToDie released in UtoDeliver");
 			}
-			
+
 			System.out.println("!!! " + nbRecMsg + "-ieme message (recu de " + sender + " / contenu = " + msg.getPayload() + ")");
 		}
 	}
@@ -74,7 +73,7 @@ public class Example {
 		int waitNb = 0;
 		int waitTime = 0;
 
-		int payload = 0;
+		byte[] payload = null;
 		int rankMessage = 0;
 		Message msg = null;
 		int exitcode;
@@ -91,7 +90,7 @@ public class Example {
 		//Semaphores initialization
 		semWaitEnoughMembers = new Semaphore(maxConcurrentRequests, true);
 		semWaitToDie = new Semaphore(maxConcurrentRequests, true);
-		
+
 		try {
 			semWaitEnoughMembers.acquire();
 			//System.out.println("semWaitEnoughMembers acquired in main");
@@ -100,7 +99,7 @@ public class Example {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		System.out.println("** Load interface");
 		Interface trin = Interface.trainsInterface();
 
@@ -125,38 +124,39 @@ public class Example {
 
 		if (sender){
 			while (!terminate) {
-			    //Filling the message
+				//Filling the message
 				//System.out.println("** Filling a message");
-				
-				payload = rankMessage;
-				try {
-					msg = Message.messageFromPayload(String.valueOf(payload).getBytes("UTF-16LE"));
-					
-					if (msg == null){
-						System.out.println("Creating a message failed.");
-						return;
-					}
-					
-					//System.out.println("Payload: " + msg.getPayload());
-					
-					//Needed to keep count of the messages
-					//System.out.println("** JnewMsg");
-					trin.Jnewmsg(msg.getPayload().length, msg.getPayload());
-					
-					rankMessage++;
 
-					//Sending the message
-				    //System.out.println("** JutoBroadcast");
-					exitcode = trin.JutoBroadcast(msg);
-					if (exitcode < 0){
-						System.out.println("JutoBroadcast failed.");
-						return;
-					}
-				} catch (UnsupportedEncodingException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				payload = Message.IntToByteArray(rankMessage);
+				if (payload == null){
+					System.out.println("Converting payload to byte array failed.");
+					return;
 				}
-			
+				
+				msg = Message.messageFromPayload(payload);
+
+				if (msg == null){
+					System.out.println("Creating a message failed.");
+					return;
+				}
+
+				//System.out.println("Payload: " + msg.getPayload());
+
+				//Needed to keep count of the messages
+				//System.out.println("** JnewMsg");
+				trin.Jnewmsg(msg.getPayload().length, msg.getPayload());
+
+				rankMessage++;
+
+				//Sending the message
+				//System.out.println("** JutoBroadcast");
+				exitcode = trin.JutoBroadcast(msg);
+				if (exitcode < 0){
+					System.out.println("JutoBroadcast failed.");
+					return;
+				}
+
+
 				try {
 					Thread.sleep(delayBetweenTwoUtoBroadcast);
 				} catch (InterruptedException e) {
@@ -185,7 +185,7 @@ public class Example {
 		if (exitcode < 0){
 			System.out.println("JtrTerminate failed.");
 			return;
-	    }
+		}
 		System.out.println("\n*********************\n");
 
 		System.exit(0);
