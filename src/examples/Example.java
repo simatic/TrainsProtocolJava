@@ -19,12 +19,24 @@ public class Example {
 
 	public static class myCallbackCircuitChange implements CallbackCircuitChange{
 
-		public myCallbackCircuitChange(){
+		private static final myCallbackCircuitChange CIRCUITCHANGE = new myCallbackCircuitChange();
+		private int id = 0;
+		
+		private myCallbackCircuitChange(){
 			//Nothing to do
 		} 
+		
+		public static myCallbackCircuitChange getInstance(){
+			return CIRCUITCHANGE;
+		}
+		
+		public void setId(int id){
+			this.id = id;
+		}
 
 		@Override
 		public void run(CircuitView cv){
+			System.out.println(this.id);
 			//Printing the circuit modification
 			System.out.println("!!! ******** callbackCircuitChange called with " +  cv.getMemb() 
 					+ " members (process ");
@@ -91,6 +103,10 @@ public class Example {
 		semWaitEnoughMembers = new Semaphore(maxConcurrentRequests, true);
 		semWaitToDie = new Semaphore(maxConcurrentRequests, true);
 
+		//Callback
+		myCallbackCircuitChange mycallback = myCallbackCircuitChange.getInstance();
+		mycallback.setId(1);
+		
 		try {
 			semWaitEnoughMembers.acquire();
 			//System.out.println("semWaitEnoughMembers acquired in main");
