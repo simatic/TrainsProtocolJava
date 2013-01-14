@@ -58,9 +58,15 @@ public class Example {
 
 	public static class myCallbackUtoDeliver implements CallbackUtoDeliver{
 
+		private static final myCallbackUtoDeliver UTODELIVER = new myCallbackUtoDeliver();
+	
 		public myCallbackUtoDeliver(){
 			//Nothing to do
 		} 
+		
+		public static myCallbackUtoDeliver getInstance(){
+			return UTODELIVER;
+		}
 
 		@Override
 		public void run(int sender, Message msg){
@@ -104,8 +110,10 @@ public class Example {
 		semWaitToDie = new Semaphore(maxConcurrentRequests, true);
 
 		//Callback
-		myCallbackCircuitChange mycallback = myCallbackCircuitChange.getInstance();
-		mycallback.setId(1);
+		myCallbackCircuitChange mycallbackCC = myCallbackCircuitChange.getInstance();
+		mycallbackCC.setId(1);
+		myCallbackUtoDeliver mycallbackUto = myCallbackUtoDeliver.getInstance();
+
 		
 		try {
 			semWaitEnoughMembers.acquire();
