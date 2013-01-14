@@ -19,7 +19,7 @@ It also runs on Mac OS X (the following tutoriel has been tested on OS X Lion).
 You will need to install the [ant tool] [ant] to be able to compile the code as indicated below.
 If you're on OS X, you shall need to install a GNU gcc version via macports or homebrew.
 
-## How to build and run the code
+## How to get the code
 
 Cloning the git repository (this repo) with Java sources:
 
@@ -39,12 +39,16 @@ The native code is a submodule of this git repo:
     git checkout jni
 ~~~ 
 
+## How to build
+
 ### Building on Linux
+
 
 ~~~ sh
     export LD_LIBRARY_PATH=TrainsProtocol/lib:LD_LIBRARY_PATH
     ant
 ~~~
+
 
 
 ### Building on OS X
@@ -53,6 +57,7 @@ The native code is a submodule of this git repo:
     export DYLD_LIBRARY_PATH=TrainsProtocol/lib/:$DYLD_LIBRARY_PATH
     ant
 ~~~
+
 
 #### Notes for OS X Lion (10.7)
 
@@ -78,11 +83,11 @@ Calling gccmakedep in the Makefile will fail. Here is a workaround:
 ~~~ 
 
 
-### Setting up the environment for the Trains Protocol:
+## Setting up the environment for the Trains Protocol:
+
+Create the addr_file at the root directory and follow these [guidelines][addr_file].
 
 ~~~ sh
-    # create the addr_file at the root directory and follow these [guidelines][addr_file]
-    touch  addr_file
     # XX is the port number for the process/machine at which you will launch the protocol
     export TRAINS_PORT=XX
 ~~~
