@@ -2,9 +2,7 @@ TrainsProtocolJava
 ==================
 
 This is a Java interface for the Trains Protocol designed by Michel Simatic. 
-It uses JNI to call native functions from the C implementation of the Trains Protocol
-tutoriel: http://www-tp-ext.it-sudparis.eu/~foltz_ar/trainsTutorial.html 
-code: https://github.com/simatic/TrainsProtocol
+It uses JNI to call native functions from the [C implementation of the Trains Protocol][TrainsProtocol] (read the [tutoriel][trains-tutoriel]).
 
 ## Portability
 
@@ -13,13 +11,13 @@ Before using the Java interface for the Trains Protocol, the C source code has t
 targeted OS.
 
 So far, the C code for the Trains Protocol has been tested on Linux (Debian and Ubuntu).
-It should also work on Mac OS X with a few additional commands (tutoriel yet to come).
+It also runs on Mac OS X (the following tutoriel has been tested on OS X Lion).
 
 
 ## Dependencies
 
 You will need to install the [ant tool] [ant] to be able to compile the code as indicated below.
-
+If you're on OS X, you shall need to install a GNU gcc version via macports or homebrew.
 
 ## How to build and run the code
 
@@ -31,15 +29,17 @@ Cloning the git repository (this repo) with Java sources:
 ~~~
 
 
-The C code is a submodule of this git repo:
+The native code is a submodule of this git repo:
 
 ~~~ sh
     git submodule update --init
     cd TrainsProtocol/
+
+    #IMPORTANT !
     git checkout jni
 ~~~ 
 
-### Building and Running on Linux
+### Building on Linux
 
 ~~~ sh
     export LD_LIBRARY_PATH=TrainsProtocol/lib:LD_LIBRARY_PATH
@@ -47,7 +47,38 @@ The C code is a submodule of this git repo:
 ~~~
 
 
-Setting up the environment for the Trains Protocol:
+### Building on OS X
+
+~~~ sh
+    export DYLD_LIBRARY_PATH=TrainsProtocol/lib/:$DYLD_LIBRARY_PATH
+    ant
+~~~
+
+#### Notes for OS X Lion (10.7)
+
+On OS X Lion the default compiler is llvm-clang:
+
+~~~ sh
+    ls -l /usr/bin/gcc
+    lrwxr-xr-x  1 root  wheel  12 11 mar  2012 /usr/bin/gcc@ -> llvm-gcc-4.2
+~~~
+
+Calling gccmakedep in the Makefile will fail. Here is a workaround:
+
+~~~ sh
+    # Find or install gcc through macports or homebrew
+    # e.g.: find /opt -iname "gcc"
+
+    # Then you can either change the symbolic link or do the following export:
+    export CC=/opt/local/bin/gcc
+    
+    # Locate gccmakedep (which should be installed with your custom installed version of make)
+    export GCCMAKEDEP_USER=/opt/local/bin/gcc
+    ant
+~~~ 
+
+
+### Setting up the environment for the Trains Protocol:
 
 ~~~ sh
     # create the addr_file at the root directory and follow these [guidelines][addr_file]
@@ -56,14 +87,14 @@ Setting up the environment for the Trains Protocol:
     export TRAINS_PORT=XX
 ~~~
 
-
-Thiw will launch the example code available in src/Examples: 
+Thiw will launch the example code Example.java available in src/examples: 
 
 ~~~ sh
     ant run
 ~~~
 
 
-
+[trains-tutoriel]: http://www-tp-ext.it-sudparis.eu/~foltz_ar/trainsTutorial.html
+[TrainsProtocol]: https://github.com/simatic/TrainsProtocol 
 [ant]: http://ant.apache.org/
 [addr_file]: http://www-tp-ext.it-sudparis.eu/~foltz_ar/trainsTutorial.html#addr_file
