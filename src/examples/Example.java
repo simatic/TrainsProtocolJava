@@ -151,7 +151,7 @@ public class Example {
 				//Filling the message
 				//System.out.println("** Filling a message");
 
-				payload = Message.IntToByteArray(rankMessage);
+				payload = Message.StringToByteArray(String.valueOf(rankMessage) + " % hello");
 				if (payload == null){
 					System.out.println("Converting payload to byte array failed.");
 					return;
