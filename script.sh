@@ -37,7 +37,7 @@ else
 	then
 		echo "compile on Mac OS X"
 		#Ok if we're compiling on Mac OS X 
-    export C_INCLUDE_PATH=:/System/Library/Frameworks/JavaVM.framework/Headers:.
+    export C_INCLUDE_PATH=/System/Library/Frameworks/JavaVM.framework/Headers:.
     make GCCMAKEDEP=$GCCMAKEDEP_USER all
 	fi
 fi
