@@ -4,6 +4,8 @@ import trains.*;
 
 import java.util.concurrent.Semaphore;
 
+import org.jgroups.util.Util;
+
 public class Example {
 
 	static boolean sender;
@@ -13,79 +15,102 @@ public class Example {
 	static boolean terminate;
 	static int nbRecMsg = 0;
 
-
 	static Semaphore semWaitEnoughMembers;
 	static Semaphore semWaitToDie;
 
-	public static class myCallbackCircuitChange implements CallbackCircuitChange{
+	public static class myCallbackCircuitChange implements
+			CallbackCircuitChange {
 
 		private static final myCallbackCircuitChange CIRCUITCHANGE = new myCallbackCircuitChange();
 		private int id = 0;
-		
-		private myCallbackCircuitChange(){
-			//Nothing to do
-		} 
-		
-		public static myCallbackCircuitChange getInstance(){
+
+		private myCallbackCircuitChange() {
+			// Nothing to do
+		}
+
+		public static myCallbackCircuitChange getInstance() {
 			return CIRCUITCHANGE;
 		}
-		
-		public void setId(int id){
+
+		public void setId(int id) {
 			this.id = id;
 		}
 
 		@Override
-		public void run(CircuitView cv){
+		public void run(CircuitView cv) {
 			System.out.println(this.id);
-			//Printing the circuit modification
-			System.out.println("!!! ******** callbackCircuitChange called with " +  cv.getMemb() 
-					+ " members (process ");
+			// Printing the circuit modification
+			System.out
+					.println("!!! ******** callbackCircuitChange called with "
+							+ cv.getMemb() + " members (process ");
 
-			//Printing the new/departed participant
-			if(cv.getJoined() != 0){
-				System.out.println(Integer.toString(cv.getJoined()) + " has arrived.)");
+			// Printing the new/departed participant
+			if (cv.getJoined() != 0) {
+				System.out.println(Integer.toString(cv.getJoined())
+						+ " has arrived.)");
 			} else {
-				System.out.println(Integer.toString(cv.getDeparted()) + " is gone.)");
+				System.out.println(Integer.toString(cv.getDeparted())
+						+ " is gone.)");
 			}
 
 			System.out.println(cv.getMemb() + " // " + nbMemberMin);
-			if (cv.getMemb() >= nbMemberMin){
-				System.out.println("!!! ******** enough members to start utoBroadcasting\n");
+			if (cv.getMemb() >= nbMemberMin) {
+				System.out
+						.println("!!! ******** enough members to start utoBroadcasting\n");
 				semWaitEnoughMembers.release();
 			}
 		}
 	}
 
-	public static class myCallbackUtoDeliver implements CallbackUtoDeliver{
+	public static class myCallbackUtoDeliver implements CallbackUtoDeliver {
 
 		private static final myCallbackUtoDeliver UTODELIVER = new myCallbackUtoDeliver();
-	
-		public myCallbackUtoDeliver(){
-			//Nothing to do
-		} 
-		
-		public static myCallbackUtoDeliver getInstance(){
+		private int id = 5;
+
+		public void setId(int id) {
+			this.id = id;
+		}
+
+		public myCallbackUtoDeliver() {
+			// Nothing to do
+		}
+
+		public static myCallbackUtoDeliver getInstance() {
 			return UTODELIVER;
 		}
 
 		@Override
-		public void run(int sender, Message msg){
-      
+		public void run(int sender, Message msg) {
+			System.out.println(this.id + " received a message!");
 			nbRecMsg++;
-			//System.out.println(nbRecMsg + " " + nbRecMsgBeforeStop);
+			// System.out.println(nbRecMsg + " " + nbRecMsgBeforeStop);
 			if (nbRecMsg >= nbRecMsgBeforeStop) {
 				terminate = true;
 				semWaitToDie.release();
-				//System.out.println("semWaitToDie released in UtoDeliver");
+				// System.out.println("semWaitToDie released in UtoDeliver");
 			}
-      String content = new String(msg.getPayload());
-			System.out.println("!!! " + nbRecMsg + "-ieme message (recu de " + sender + " / contenu = " + content + ")");
+
+			try {
+				String msgString = (String) Util.objectFromByteBuffer(msg
+						.getPayload());// , 0,
+				// msgTrains.getMessageHeader().getLen() + 1);
+				// msg.getMessageHeader().getLen());
+				System.out.println("msgString = " + msgString);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			String content = new String(msg.getPayload());
+			System.out.println("!!! " + nbRecMsg + "-ieme message (recu de "
+					+ sender + " / contenu = " + content + ")");
+
 		}
 	}
 
-	public static void main(String args[]) {	
+	public static void main(String args[]) {
 
-		//trInit parameters: values by default
+		// trInit parameters: values by default
 		int trainsNumber = 0;
 		int wagonLength = 0;
 		int waitNb = 0;
@@ -100,24 +125,25 @@ public class Example {
 
 		// Test parameters
 		sender = true;
-		nbMemberMin = 3;
+		nbMemberMin = 2;
 		delayBetweenTwoUtoBroadcast = 1000;
-		nbRecMsgBeforeStop = 10;
+		nbRecMsgBeforeStop = 2;
 		terminate = false;
 
-		//Semaphores initialization
+		// Semaphores initialization
 		semWaitEnoughMembers = new Semaphore(maxConcurrentRequests, true);
 		semWaitToDie = new Semaphore(maxConcurrentRequests, true);
 
-		//Callback
-		myCallbackCircuitChange mycallbackCC = myCallbackCircuitChange.getInstance();
-		mycallbackCC.setId(1);
+		// Callback
+		myCallbackCircuitChange mycallbackCC = myCallbackCircuitChange
+				.getInstance();
+		mycallbackCC.setId(8);
 		myCallbackUtoDeliver mycallbackUto = myCallbackUtoDeliver.getInstance();
+		mycallbackUto.setId(999);
 
-		
 		try {
 			semWaitEnoughMembers.acquire();
-			//System.out.println("semWaitEnoughMembers acquired in main");
+			// System.out.println("semWaitEnoughMembers acquired in main");
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -129,57 +155,71 @@ public class Example {
 
 		System.out.println("** trInit");
 		exitcode = trin.JtrInit(trainsNumber, wagonLength, waitNb, waitTime,
-				myCallbackCircuitChange.class.getName(), 
+				myCallbackCircuitChange.class.getName(),
 				myCallbackUtoDeliver.class.getName());
 
-		if (exitcode < 0){
+		if (exitcode < 0) {
 			System.out.println("JtrInit failed.");
 			return;
 		}
 
 		try {
 			semWaitEnoughMembers.acquire();
-			//System.out.println("semWaitEnoughMembers acquired in main");
+			// System.out.println("semWaitEnoughMembers acquired in main");
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		if (sender){
+		if (sender) {
 			while (!terminate) {
-				//Filling the message
-				//System.out.println("** Filling a message");
-
-				payload = Message.StringToByteArray(String.valueOf(rankMessage) + " % hello");
-				if (payload == null){
-					System.out.println("Converting payload to byte array failed.");
+				// Filling the message
+				// System.out.println("** Filling a message");
+				String msgString = "hi";
+				String msgStringAfter = null;
+				try {
+					payload = Util.objectToByteBuffer(msgString);
+					msgStringAfter = (String) Util.objectFromByteBuffer(
+							payload, 0,
+							// msgTrains.getMessageHeader().getLen() + 1);
+							payload.length);
+					System.out.println("test func, after = " + msgStringAfter);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				// payload =
+				// Message.StringToByteArray(String.valueOf(rankMessage) +
+				// " % hello");
+				if (payload == null) {
+					System.out
+							.println("Converting payload to byte array failed.");
 					return;
 				}
-				
+
 				msg = Message.messageFromPayload(payload);
 
-				if (msg == null){
+				if (msg == null) {
 					System.out.println("Creating a message failed.");
 					return;
 				}
 
-				//System.out.println("Payload: " + msg.getPayload());
+				// System.out.println("Payload: " + msg.getPayload());
 
-				//Needed to keep count of the messages
-				//System.out.println("** JnewMsg");
+				// Needed to keep count of the messages
+				// System.out.println("** JnewMsg");
 				trin.Jnewmsg(msg.getPayload().length, msg.getPayload());
 
 				rankMessage++;
 
-				//Sending the message
-				//System.out.println("** JutoBroadcast");
+				// Sending the message
+				// System.out.println("** JutoBroadcast");
 				exitcode = trin.JutoBroadcast(msg);
-				if (exitcode < 0){
+				if (exitcode < 0) {
 					System.out.println("JutoBroadcast failed.");
 					return;
 				}
-
 
 				try {
 					Thread.sleep(delayBetweenTwoUtoBroadcast);
@@ -190,11 +230,11 @@ public class Example {
 			}
 			terminate = true;
 			semWaitToDie.release();
-			//System.out.println("semWaitToDie released in UtoDeliver");
+			// System.out.println("semWaitToDie released in UtoDeliver");
 		} else {
 			try {
 				semWaitToDie.acquire();
-				//System.out.println("semWaitToDie acquired in main");
+				// System.out.println("semWaitToDie acquired in main");
 
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -206,13 +246,13 @@ public class Example {
 
 		System.out.println("** JtrTerminate");
 		exitcode = trin.JtrTerminate();
-		if (exitcode < 0){
+		if (exitcode < 0) {
 			System.out.println("JtrTerminate failed.");
 			return;
 		}
 		System.out.println("\n*********************\n");
 
 		System.exit(0);
-		//return;
+		// return;
 	}
 }

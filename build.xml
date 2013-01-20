@@ -2,73 +2,62 @@
 
 <project basedir="." default="build" name="TrainsProtocolJava">
 
-  <description>
+	<description>
     Compile JNI Java classes and related C libraries for the trains protocol
   </description>
 
-  <property name="src" value="src"/>
-  <property name="bin" value="bin"/>
-  <property name="trains" value="src/trains"/>
-  <property name="examples" value="src/examples"/>
+	<property name="src" value="src" />
+	<property name="bin" value="bin" />
+	<property name="trains" value="src/trains" />
+	<property name="examples" value="src/examples" />
 
-  <target name="init">
-    <!-- Create the time stamp -->
-    <tstamp/>
-    <!-- Create the bin directory structure used by compile -->
-    <mkdir dir="${bin}"/>
-  </target>  
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the bin directory structure used by compile -->
+		<mkdir dir="${bin}" />
+	</target>
 
-  <target name="all">
-    <antcall target="clean"/>
-    <antcall target="build"/>
-    <antcall target="run"/>
-  </target>
-	
-  <target name="build" depends="init" description="compile the source " >
-    <antcall target="build-trains"/>
-    <antcall target="build-jar"/>
-    <antcall target="build-examples"/>
-  </target>
+	<target name="all">
+		<antcall target="clean" />
+		<antcall target="build" />
+		<antcall target="run" />
+	</target>
 
-  <path id="project.classpath">
-    <pathelement location="bin"/>
-  </path>
+	<target name="build" depends="init" description="compile the source ">
+		<antcall target="build-trains" />
+		<antcall target="build-jar" />
+		<antcall target="build-examples" />
+	</target>
 
-  <target name="clean">
-    <delete dir="${bin}"/>
-  </target>		
-	
-  <target name="build-trains" description="Build trains jar">
-    <javac srcdir="${trains}"
- 	   destdir="${bin}"
-  	   includes="CallbackCircuitChange.java, CallbackUtoDeliver.java, CircuitView.java,
-  					Interface.java, Message.java, MessageHeader.java, MessageType.java"/>
-    <exec dir="." executable="/bin/sh">
-      <arg line="script.sh"/>
-    </exec>
-  </target> 
-		
-  <target name="build-jar" description="Build jar archive" >
-    <jar destfile="${bin}/TrainsProtocol.jar"
-     basedir="${bin}"
-     includes="${bin}/trains"/>
-  </target>
-  	
-  <target name="build-examples" 
-    description="Build examples">
-      <javac classpath="${bin}/TrainsProtocol.jar:."
-       srcdir="${examples}"
-  	   destdir="${bin}"
-   	   includes="Example.java"/>
-  </target> 	 	
-  	
-  <target name="run" description="run Java examples">
-	  <java fork="on"
-	  	classpath="${bin}:."
-	    failonerror="true"
-	    classname="examples.Example">
-	  </java>
-  </target>
-	
+	<path id="project.classpath">
+		<pathelement location="bin" />
+	</path>
+
+	<target name="clean">
+		<delete dir="${bin}" />
+	</target>
+
+	<target name="build-trains" description="Build trains jar">
+		<javac srcdir="${trains}" destdir="${bin}" includes="CallbackCircuitChange.java, CallbackUtoDeliver.java, CircuitView.java,
+  					Interface.java, Message.java, MessageHeader.java, MessageType.java" />
+		<exec dir="." executable="/bin/sh">
+			<arg line="script.sh" />
+		</exec>
+	</target>
+
+	<target name="build-jar" description="Build jar archive">
+		<jar destfile="${bin}/TrainsProtocol.jar" basedir="${bin}" includes="${bin}/trains" />
+	</target>
+
+	<target name="build-examples" description="Build examples">
+		<javac classpath="${bin}/TrainsProtocol.jar:.:/home/wang/workspace/JGroups-github/JGroups/dist/jgroups-3.2.2.Final.jar" srcdir="${examples}" destdir="${bin}" includes="Example.java" />
+	</target>
+
+	<target name="run" description="run Java examples">
+		<java fork="on" classpath="${bin}:.:/home/wang/workspace/JGroups-github/JGroups/dist/jgroups-3.2.2.Final.jar" failonerror="true" classname="examples.Example">
+		</java>
+	</target>
+
 </project>
 
