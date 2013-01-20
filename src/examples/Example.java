@@ -70,7 +70,7 @@ public class Example {
 
 		@Override
 		public void run(int sender, Message msg){
-
+      
 			nbRecMsg++;
 			//System.out.println(nbRecMsg + " " + nbRecMsgBeforeStop);
 			if (nbRecMsg >= nbRecMsgBeforeStop) {
@@ -78,8 +78,8 @@ public class Example {
 				semWaitToDie.release();
 				//System.out.println("semWaitToDie released in UtoDeliver");
 			}
-
-			System.out.println("!!! " + nbRecMsg + "-ieme message (recu de " + sender + " / contenu = " + msg.getPayload() + ")");
+      String content = new String(msg.getPayload());
+			System.out.println("!!! " + nbRecMsg + "-ieme message (recu de " + sender + " / contenu = " + content + ")");
 		}
 	}
 
