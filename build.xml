@@ -10,6 +10,7 @@
   <property name="bin" value="bin"/>
   <property name="trains" value="src/trains"/>
   <property name="examples" value="src/examples"/>
+  <property name="perf" value="src/perf"/>
 
   <target name="init">
     <!-- Create the time stamp -->
@@ -18,16 +19,30 @@
     <mkdir dir="${bin}"/>
   </target>  
 
-  <target name="all">
+  <target name="build-all">
     <antcall target="clean"/>
     <antcall target="build"/>
-    <antcall target="run"/>
+    <antcall target="build-examples"/>
+    <antcall target="build-perf"/>
   </target>
 	
-  <target name="build" depends="init" description="compile the source " >
+  <target name="examples">
+    <antcall target="clean"/>
+    <antcall target="build"/>
+    <antcall target="build-examples"/>
+    <antcall target="run-examples"/>
+  </target>
+	
+  <target name="perf">
+	<antcall target="clean"/>
+    <antcall target="build"/>
+	<antcall target="build-perf"/>
+	<antcall target="run-perf"/>
+  </target>
+	
+  <target name="build" depends="init" description="compile the source in src/trains" >
     <antcall target="build-trains"/>
     <antcall target="build-jar"/>
-    <antcall target="build-examples"/>
   </target>
 
   <path id="project.classpath">
@@ -60,14 +75,30 @@
        srcdir="${examples}"
   	   destdir="${bin}"
    	   includes="Example.java"/>
-  </target> 	 	
+  </target> 	
+	
+  <target name="build-perf" 
+	 description="Build perf">
+    <javac classpath="${bin}/TrainsProtocol.jar:."
+	  srcdir="${perf}"
+	  destdir="${bin}"
+	  includes="Perf.java, TimeKeeper.java"/>
+  </target> 	
   	
-  <target name="run" description="run Java examples">
+  <target name="run-examples" description="run Java examples">
 	  <java fork="on"
 	  	classpath="${bin}:."
 	    failonerror="true"
 	    classname="examples.Example">
 	  </java>
+  </target>
+
+  <target name="run-perf" description="run Java perf program">
+	 <java fork="on"
+      classpath="${bin}:."
+	  failonerror="true"
+	  classname="perf.Perf">
+     </java>
   </target>
 	
 </project>
