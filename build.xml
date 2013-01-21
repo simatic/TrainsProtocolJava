@@ -12,13 +12,35 @@
   <property name="examples" value="src/examples"/>
   <property name="perf" value="src/perf"/>
 
+  <target name="help">
+    <echo>Here are the commands you can perform:</echo>
+    <echo>Cleaning: </echo>
+    <echo>    * clean          - delete bin/ directory </echo>
+    <echo></echo>
+    <echo>Building: </echo>
+    <echo>    * build          - compile trains package and build the jar file TrainsProtocol.jar</echo>
+    <echo>    * build-examples - compile the examples package (needs the TrainsProtocol.jar file) </echo>
+    <echo>    * build-perf     - compile the perf package (needs the TrainsProtocol.jar file)</echo>
+    <echo>    * build-all      - compile all the source code and build the jar file TrainsProtocol.jar</echo>
+    <echo></echo>
+    <echo>Building and running examples:</echo>
+    <echo>    * examples       - build the examples package and run examples/Example.java</echo>
+    <echo>    * perf           - build the perf packahe and run perf/Perf.java</echo>
+    <echo></echo>
+    <echo>Running examples:</echo>
+    <echo>    * run-examples   - run the examples/Example.java</echo>
+    <echo>    * run-perf       - run the perf/Perf.java</echo>
+    <echo></echo>
+    <echo></echo>
+  </target>  
+
   <target name="init">
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the bin directory structure used by compile -->
     <mkdir dir="${bin}"/>
   </target>  
-
+	  
   <target name="build-all">
     <antcall target="clean"/>
     <antcall target="build"/>
@@ -27,15 +49,11 @@
   </target>
 	
   <target name="examples">
-    <antcall target="clean"/>
-    <antcall target="build"/>
     <antcall target="build-examples"/>
     <antcall target="run-examples"/>
   </target>
 	
   <target name="perf">
-	<antcall target="clean"/>
-    <antcall target="build"/>
 	<antcall target="build-perf"/>
 	<antcall target="run-perf"/>
   </target>
@@ -82,7 +100,10 @@
     <javac classpath="${bin}/TrainsProtocol.jar:."
 	  srcdir="${perf}"
 	  destdir="${bin}"
-	  includes="Perf.java, TimeKeeper.java"/>
+	  includes="Perf.java, TimeKeeper.java, InterfaceJNI.java"/>
+    <exec dir="TrainsProtocol/tests/integration/JNIperf" executable="/bin/sh">
+      <arg line="script.sh"/>
+    </exec>
   </target> 	
   	
   <target name="run-examples" description="run Java examples">

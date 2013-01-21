@@ -4,13 +4,67 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.ThreadMXBean;
 
+import trains.Interface;
+
 public class TimeKeeper implements Runnable {
+	
+	private final int broadcasters;
+	private final int number;
+	private final int size;
+	private final int warmup;
+	private final int measurement;
+	private final int cooldown;
 	
 	private long timeLoadInterfaceBegins = -1;
 	private long timeLoadInterfaceEnds = -1;
 	
 	private long timeJtrInitBegins = -1;
-	private long timeJtrInitEnds = -1;
+	private long timeJtrInitEnds = -1;	
+	
+	public static class Builder{
+		//Required parameters
+		private final int broadcasters;
+		private final int number;
+		private final int size;
+	
+		//Optional parameters - initialized with default values
+		private int warmup = 300;
+		private int measurement = 600;
+		private int cooldown = 10;
+		
+		public Builder(int broadcasters, int number, int size){
+			this.broadcasters = broadcasters;
+			this.number = number;
+			this.size = size;
+		}
+		
+		public Builder warmup(int val){
+			warmup = val;
+			return this;
+		}
+
+		public Builder measurement(int val){
+			measurement = val;
+			return this;
+		}
+		
+		public Builder cooldown(int val){
+			cooldown = val;
+			return this;
+		}		
+		public TimeKeeper build(){
+			return new TimeKeeper(this);
+		}
+	}
+	
+	private TimeKeeper(Builder builder){
+		broadcasters = builder.broadcasters;
+		number = builder.number;
+		size = builder.size;
+		warmup = builder.warmup;
+		measurement = builder.measurement;
+		cooldown = builder.warmup;
+	}
 	
 	public void run(){
 
@@ -24,26 +78,37 @@ public class TimeKeeper implements Runnable {
 		 * number of calls to newmsg() 
 		 * and more... */
 
-
-
-		ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-		if (threadMXBean == null){
-			throw new NullPointerException("Unable to collect " +
-					"thread metrics, jmx bean is null"); }
-
-		OperatingSystemMXBean osMXBean = ManagementFactory.getOperatingSystemMXBean();
-		if (osMXBean == null){
-			throw new NullPointerException("Unable to collect " +
-					"operating system metrics, jmx bean is null"); }
-
-		// Returns the system load average for the last minute.
-		// Java 6 only
+		long timeBegins = -1;
+		long timeEnds = -1;
 		
-		//measurementDone = true;
+		InterfaceJNI perfin = InterfaceJNI.perfInterface();
 		
-		System.out.println("System load average for the last minute : " + osMXBean.getSystemLoadAverage());
+		try {
+			Thread.sleep(warmup * 1000);
+			
+			timeBegins = System.nanoTime();
+			perfin.JgetrusageBegin();
+			
+			Thread.sleep(measurement * 1000);
+			
+			timeEnds = System.nanoTime();
+			perfin.JgetrusageEnd();
+			
+			Thread.sleep(cooldown * 1000);
+			
+			this.setMeasurementDone();
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		System.out.println("Time for LoadInterface (in sec): " + (this.timeLoadInterfaceEnds - this.timeLoadInterfaceBegins)/1000000000d);
+		System.out.println("Time for JtrInit (in sec): " + (this.timeJtrInitEnds - this.timeJtrInitBegins)/1000000000d);
+		System.out.println("Elasped time (in sec): " + (timeEnds - timeBegins)/1000000000d);
 		
+		System.out.println("ru_utime: " + perfin.Jgetru_utime());
+
 	}
 	
 	public void setTimeLoadInterfaceBegins(long val){
@@ -51,7 +116,7 @@ public class TimeKeeper implements Runnable {
 	}
 	
 	public void setTimeLoadInterfaceEnds(long val){
-		this.timeLoadInterfaceBegins = val;
+		this.timeLoadInterfaceEnds = val;
 	}
 	
 	public void setTimeJtrInitBegins(long val){
@@ -62,5 +127,9 @@ public class TimeKeeper implements Runnable {
 		this.timeJtrInitEnds = val;
 	}
 	
+	public void setMeasurementDone(){
+		Perf.measurementDone = true;
+	}
+
 }
 

@@ -7,13 +7,12 @@ import java.util.concurrent.Semaphore;
 
 public class Perf {
 
-	static boolean sender;
-	static int nbMemberMin;
-	static int delayBetweenTwoUtoBroadcast;
-	static int nbRecMsgBeforeStop;
-	static boolean measurementDone;
+	//static boolean sender;
+	static int broadcasters;
+	static int delayBetweenTwoUtoBroadcast = 10;
+	//static int nbRecMsgBeforeStop;
 	static int nbRecMsg = 0;
-
+	static boolean measurementDone;
 
 	static Semaphore semWaitEnoughMembers;
 
@@ -36,7 +35,6 @@ public class Perf {
 
 		@Override
 		public void run(CircuitView cv){
-			System.out.println(this.id);
 			//Printing the circuit modification
 			System.out.println("!!! ******** callbackCircuitChange called with " +  cv.getMemb() 
 					+ " members (process ");
@@ -52,8 +50,8 @@ public class Perf {
 				}
 			}
 
-			System.out.println(cv.getMemb() + " // " + nbMemberMin);
-			if (cv.getMemb() >= nbMemberMin){
+			System.out.println(cv.getMemb() + " // " + broadcasters);
+			if (cv.getMemb() >= broadcasters){
 				System.out.println("!!! ******** enough members to start utoBroadcasting\n");
 				semWaitEnoughMembers.release();
 			}
@@ -100,7 +98,7 @@ public class Perf {
 		int rank = 0;
 		
 		// Test parameters
-		int broadcasters = 2;
+		broadcasters = 2;
 		int cooldown = 1; /* Default value = 10 seconds */
 		int measurement = 10; /* Default value = 600 seconds */
 		int number = 2;
@@ -110,7 +108,7 @@ public class Perf {
 		
 		//Semaphores initialization
 		semWaitEnoughMembers = new Semaphore(maxConcurrentRequests, true);
-
+		
 		//Callback
 		myCallbackCircuitChange mycallbackCC = myCallbackCircuitChange.getInstance();
 		mycallbackCC.setId(1);
@@ -118,15 +116,13 @@ public class Perf {
 
 
 		try {
-			semWaitEnoughMembers.acquire();
-			
+			semWaitEnoughMembers.acquire();			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		TimeKeeper timeKeeper = new TimeKeeper();
-		new Thread(timeKeeper).start();
+		TimeKeeper timeKeeper = new TimeKeeper.Builder(2, 2, 10).warmup(1).measurement(1).cooldown(1).build();
 		
 		timeKeeper.setTimeLoadInterfaceBegins(System.nanoTime());	
 		Interface trin = Interface.trainsInterface();
@@ -138,7 +134,7 @@ public class Perf {
 				myCallbackCircuitChange.class.getName(), 
 				myCallbackUtoDeliver.class.getName());
 		
-		timeKeeper.setTimeJtrInitBegins(System.nanoTime());
+		timeKeeper.setTimeJtrInitEnds(System.nanoTime());
 
 
 		if (exitcode < 0){
@@ -148,13 +144,14 @@ public class Perf {
 
 		try {
 			semWaitEnoughMembers.acquire();
-
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		new Thread(timeKeeper).start();
 
 		if (rank < broadcasters){
-			while (true) {
+			while (!measurementDone) {
 
 				payload = Message.IntToByteArray(rankMessage);
 				if (payload == null){
@@ -188,9 +185,7 @@ public class Perf {
 				}
 			}
 		} 
-
-		System.out.println("System received enough messages? game over !");
-
+		
 		System.out.println("** JtrTerminate");
 		exitcode = trin.JtrTerminate();
 		if (exitcode < 0){
