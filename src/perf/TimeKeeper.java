@@ -1,11 +1,5 @@
 package perf;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
-import java.lang.management.ThreadMXBean;
-
-import trains.Interface;
-
 public class TimeKeeper implements Runnable {
 	
 	private final int broadcasters;
@@ -84,17 +78,19 @@ public class TimeKeeper implements Runnable {
 		InterfaceJNI perfin = InterfaceJNI.perfInterface();
 		
 		try {
-			Thread.sleep(warmup * 1000);
+			Thread.sleep(this.warmup * 1000);
 			
 			timeBegins = System.nanoTime();
 			perfin.JgetrusageBegin();
+			perfin.JsetcountersBegin();
 			
-			Thread.sleep(measurement * 1000);
+			Thread.sleep(this.measurement * 1000);
 			
 			timeEnds = System.nanoTime();
 			perfin.JgetrusageEnd();
+			perfin.JsetcountersEnd();
 			
-			Thread.sleep(cooldown * 1000);
+			Thread.sleep(this.cooldown * 1000);
 			
 			this.setMeasurementDone();
 
@@ -108,6 +104,26 @@ public class TimeKeeper implements Runnable {
 		System.out.println("Elasped time (in sec): " + (timeEnds - timeBegins)/1000000000d);
 		
 		System.out.println("ru_utime: " + perfin.Jgetru_utime());
+		System.out.println("su_utime: " + perfin.Jgetru_stime());
+
+		System.out.println("number of messages delivered to the application: " + perfin.Jgetmessages_delivered());
+		System.out.println("number of bytes delivered to the application: " + perfin.Jgetmessages_bytes_delivered());
+		System.out.println("number of bytes of trains received from the network: " + perfin.Jgettrains_bytes_received());
+		System.out.println("number of trains received from the network: " + perfin.Jgettrains_received());
+		System.out.println("number of bytes of recent trains received from the network: " + perfin.Jgetrecent_trains_bytes_received());
+		System.out.println("number of recent trains received from the network: " + perfin.Jgetrecent_trains_received());
+		System.out.println("number of wagons delivered to the application: " + perfin.Jgetwagons_delivered());
+		System.out.println("number of times automaton has been in state WAIT: " + perfin.Jgetwait_states());
+		System.out.println("number of calls to commRead() : " + perfin.Jgetcomm_read());
+		System.out.println("number of bytes read by commRead() calls: " + perfin.Jgetcomm_read_bytes());
+		System.out.println("number of calls to commReadFully(): " + perfin.Jgetcomm_readFully());
+		System.out.println("number of bytes read by commReadFully() calls: " + perfin.Jgetcomm_readFully_bytes());
+		System.out.println("number of calls to commWrite(): " + perfin.Jgetcomm_write());
+		System.out.println("number of bytes written by commWrite() calls: " + perfin.Jgetcomm_write_bytes());
+		System.out.println("number of calls to commWritev(): " + perfin.Jgetcomm_writev());
+		System.out.println("number of bytes written by commWritev() calls: " + perfin.Jgetcomm_writev_bytes());
+		System.out.println("number of calls to newmsg(): " + perfin.Jgetnewmsg());
+		System.out.println("number of times there was flow control when calling newmsg(): " + perfin.JgetflowControl());
 
 	}
 	
