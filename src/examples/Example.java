@@ -53,6 +53,13 @@ public class Example {
 				System.out.println("!!! ******** enough members to start utoBroadcasting\n");
 				semWaitEnoughMembers.release();
 			}
+			
+			//Print circuit view data
+			System.out.println("MembersAddress");
+			int rank = 0;
+			for(rank=0; rank < nbMemberMin; rank++){
+				System.out.println("rank " + rank + ": " + cv.getMembersAddress(rank));
+			}
 		}
 	}
 
