@@ -140,6 +140,8 @@ public class Example {
 			return;
 		}
 
+		System.out.println("my address: " + trin.JgetMyAddress());
+		
 		try {
 			semWaitEnoughMembers.acquire();
 
