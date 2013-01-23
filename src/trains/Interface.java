@@ -1,9 +1,7 @@
 package trains;
 
 public class Interface {
-	
-	//make a real static factory
-	 
+		 
 	private static int max_memb;
 	//myAddress
 	//native methods

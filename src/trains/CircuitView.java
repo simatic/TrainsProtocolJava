@@ -20,7 +20,6 @@ public class CircuitView {
 	
 	private CircuitView(int memb, int joined, int departed){
 		this.nmemb = memb;
-		//this.members = new HashMap<Integer,Integer>(/* default initial capacity at 16 */);
 		this.members = new Vector<Integer>(MAX_MEMB);
 		this.joined = joined;
 		this.departed = departed;

@@ -36,7 +36,8 @@ public class Example {
 
 		@Override
 		public void run(CircuitView cv){
-			System.out.println(this.id);
+			int rank;
+			System.out.println("Callback id: " + this.id);
 			//Printing the circuit modification
 			System.out.println("!!! ******** callbackCircuitChange called with " +  cv.getMemb() 
 					+ " members (process ");
@@ -55,10 +56,8 @@ public class Example {
 			}
 			
 			//Print circuit view data
-			System.out.println("MembersAddress");
-			int rank = 0;
 			for(rank=0; rank < nbMemberMin; rank++){
-				System.out.println("rank " + rank + ": " + cv.getMembersAddress(rank));
+				System.out.println("address for rank " + rank + ": " + cv.getMembersAddress(rank));
 			}
 		}
 	}
@@ -79,11 +78,9 @@ public class Example {
 		public void run(int sender, Message msg){
       
 			nbRecMsg++;
-			//System.out.println(nbRecMsg + " " + nbRecMsgBeforeStop);
 			if (nbRecMsg >= nbRecMsgBeforeStop) {
 				terminate = true;
 				semWaitToDie.release();
-				//System.out.println("semWaitToDie released in UtoDeliver");
 			}
       String content = new String(msg.getPayload());
 			System.out.println("!!! " + nbRecMsg + "-ieme message (recu de " + sender + " / contenu = " + content + ")");
@@ -124,7 +121,6 @@ public class Example {
 		
 		try {
 			semWaitEnoughMembers.acquire();
-			//System.out.println("semWaitEnoughMembers acquired in main");
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -146,7 +142,6 @@ public class Example {
 
 		try {
 			semWaitEnoughMembers.acquire();
-			//System.out.println("semWaitEnoughMembers acquired in main");
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -171,16 +166,12 @@ public class Example {
 					return;
 				}
 
-				//System.out.println("Payload: " + msg.getPayload());
-
 				//Needed to keep count of the messages
-				//System.out.println("** JnewMsg");
 				trin.Jnewmsg(msg.getPayload().length, msg.getPayload());
 
 				rankMessage++;
 
 				//Sending the message
-				//System.out.println("** JutoBroadcast");
 				exitcode = trin.JutoBroadcast(msg);
 				if (exitcode < 0){
 					System.out.println("JutoBroadcast failed.");
@@ -197,11 +188,9 @@ public class Example {
 			}
 			terminate = true;
 			semWaitToDie.release();
-			//System.out.println("semWaitToDie released in UtoDeliver");
 		} else {
 			try {
 				semWaitToDie.acquire();
-				//System.out.println("semWaitToDie acquired in main");
 
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -220,6 +209,5 @@ public class Example {
 		System.out.println("\n*********************\n");
 
 		System.exit(0);
-		//return;
 	}
 }
