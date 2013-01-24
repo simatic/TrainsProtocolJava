@@ -51,7 +51,7 @@ The native code is a submodule of this git repo:
     export LD_LIBRARY_PATH=TrainsProtocol/lib:LD_LIBRARY_PATH
 ~~~
 
-You also need to find the jni.h header, which comes along with the JDK (the location depends on your system):
+You also need to find the jni.h header, which comes along with the JDK (the location depends of your system):
 
 ~~~ sh
     export C_INCLUDE_LIBRARY=/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/linux:.
@@ -66,7 +66,7 @@ You also need to find the jni.h header, which comes along with the JDK (the loca
     ant
 ~~~
 
-You also need to find the jni.h header, which comes along with the JDK (the location depends on your system):
+You also need to find the jni.h header, which comes along with the JDK (the location depends of your system):
 
 ~~~ sh
     export C_INCLUDE_LIBRARY=/System/Library/Frameworks/JavaVM.framework/Headers:.
