@@ -4,6 +4,9 @@ TrainsProtocolJava
 This is a Java interface for the Trains Protocol designed by Michel Simatic. 
 It uses JNI to call native functions from the [C implementation of the Trains Protocol][TrainsProtocol] (read the [tutoriel][trains-tutoriel]).
 
+Trains protocol is a uniform and totally-ordered broadcast protocol [Défago et al., 2004].
+It is designed to be a throughput-efficient protocol, especially for short messages (100 bytes or lower) [Simatic, 2012].
+
 ## Portability
 
 Because it performs JNI calls to a C library, the Java code is not cross-plateform out of the box.
@@ -85,8 +88,7 @@ Calling gccmakedep in the Makefile will fail. Here is a workaround:
 
 ## Setting up the environment for the Trains Protocol:
 
-Create the addr_file at the root directory and follow these [guidelines][addr_file].
-
+Create the addr_file at the root directory and follow these [guidelines][addr_file] or these [ones][addr_file_readme].
 ~~~ sh
     # XX is the port number for the process/machine at which you will launch the protocol
     export TRAINS_PORT=XX
@@ -104,7 +106,14 @@ Thiw will launch the example code Example.java available in src/examples:
 You will find the javadoc of the Java API of the Trains Protocol in doc/.
 The C native code in TrainsProtocol is also documented with doxygen.
 
+## Bibliography
+
+[Défago et al., 2004] Défago, X., Schiper, A. et Urbán, P. (2004). Total order broadcast and multicast algorithms : Taxonomy and survey. ACM Comput. Surv., 36:372?421.
+
+[Simatic, 2012] M. Simatic. Communication et partage de données dans les systèmes répartis (Data communication and data sharing in distributed system, in French). PhD thesis, École Doctorale ÉDITE, October 2012 (available at http://www-public.it-sudparis.eu/~simatic/Recherche/Publications/theseSimatic.pdf).
+
 [trains-tutoriel]: http://www-tp-ext.it-sudparis.eu/~foltz_ar/trainsTutorial.html
 [TrainsProtocol]: https://github.com/simatic/TrainsProtocol 
 [ant]: http://ant.apache.org/
+[addr_file_readme]: https://github.com/simatic/TrainsProtocol#running-an-application-using-trains-protocol
 [addr_file]: http://www-tp-ext.it-sudparis.eu/~foltz_ar/trainsTutorial.html#addr_file
