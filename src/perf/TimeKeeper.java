@@ -1,6 +1,10 @@
 package perf;
 
+import trains.Interface;
+
 public class TimeKeeper implements Runnable {
+	
+	private final Interface trin;
 	
 	private final int broadcasters;
 	private final int number;
@@ -17,6 +21,7 @@ public class TimeKeeper implements Runnable {
 	
 	public static class Builder{
 		//Required parameters
+		private final Interface trin;
 		private final int broadcasters;
 		private final int number;
 		private final int size;
@@ -26,7 +31,8 @@ public class TimeKeeper implements Runnable {
 		private int measurement = 600;
 		private int cooldown = 10;
 		
-		public Builder(int broadcasters, int number, int size){
+		public Builder(Interface trin, int broadcasters, int number, int size){
+			this.trin = trin;
 			this.broadcasters = broadcasters;
 			this.number = number;
 			this.size = size;
@@ -52,6 +58,7 @@ public class TimeKeeper implements Runnable {
 	}
 	
 	private TimeKeeper(Builder builder){
+		trin = builder.trin;
 		broadcasters = builder.broadcasters;
 		number = builder.number;
 		size = builder.size;
@@ -82,13 +89,13 @@ public class TimeKeeper implements Runnable {
 			
 			timeBegins = System.nanoTime();
 			perfin.JgetrusageBegin();
-			perfin.JsetcountersBegin();
+			perfin.JsetcountersBegin(trin);
 			
 			Thread.sleep(this.measurement * 1000);
 			
 			timeEnds = System.nanoTime();
 			perfin.JgetrusageEnd();
-			perfin.JsetcountersEnd();
+			perfin.JsetcountersEnd(trin);
 			
 			Thread.sleep(this.cooldown * 1000);
 			

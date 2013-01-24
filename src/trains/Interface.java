@@ -15,7 +15,8 @@ public class Interface {
 	public native int utoBroadcast(Message msg);
 	private static native void initIDsMessageHeader();
 	private static native void initIDsMessage();
-	private static native void initIDsCircuitView();	
+	private static native void initIDsCircuitView();
+	public native void dumpCountersData(byte[] data);
 	
 	// Static factory for TrainsInterface
 	public static Interface trainsInterface(){
@@ -66,6 +67,11 @@ public class Interface {
 	public int JutoBroadcast(Message msg){
 		int exitcode = this.utoBroadcast(msg);			
 		return exitcode;
-	}	
+	}
+	
+	public void JdumpCountersData(byte[] data){
+		dumpCountersData(data);
+	}
+
 }
 	
