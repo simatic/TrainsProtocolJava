@@ -99,6 +99,11 @@ Thiw will launch the example code Example.java available in src/examples:
 ~~~
 
 
+## Documentation
+
+You will find the javadoc of the Java API of the Trains Protocol in doc/.
+The C native code in TrainsProtocol is also documented with doxygen.
+
 [trains-tutoriel]: http://www-tp-ext.it-sudparis.eu/~foltz_ar/trainsTutorial.html
 [TrainsProtocol]: https://github.com/simatic/TrainsProtocol 
 [ant]: http://ant.apache.org/
