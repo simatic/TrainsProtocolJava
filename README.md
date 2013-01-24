@@ -49,9 +49,14 @@ The native code is a submodule of this git repo:
 
 ~~~ sh
     export LD_LIBRARY_PATH=TrainsProtocol/lib:LD_LIBRARY_PATH
-    ant
 ~~~
 
+You also need to find the jni.h header, which comes along with the JDK (the location depends on your system):
+
+~~~ sh
+    export C_INCLUDE_LIBRARY=/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/linux:.
+    ant
+~~~
 
 
 ### Building on OS X
@@ -61,6 +66,12 @@ The native code is a submodule of this git repo:
     ant
 ~~~
 
+You also need to find the jni.h header, which comes along with the JDK (the location depends on your system):
+
+~~~ sh
+    export C_INCLUDE_LIBRARY=/System/Library/Frameworks/JavaVM.framework/Headers:.
+    ant
+~~~
 
 #### Notes for OS X Lion (10.7)
 
