@@ -6,7 +6,7 @@ package trains;
  * 
  * IMPORTANT: when implementing this interface, define a static factory getInstance().
  * This factory is called in the native code to make sure only one callback exists.
- * 
+ * ALSO: the name of the class should be of less than 128 characters.
  * @author Stephanie Ouillon
  *
  */
