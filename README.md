@@ -14,7 +14,8 @@ Before using the Java interface for the Trains Protocol, the C source code has t
 targeted OS.
 
 So far, the C code for the Trains Protocol has been tested on Linux (Debian and Ubuntu).
-It also runs on Mac OS X (the following tutoriel has been tested on OS X Lion).
+It also runs on Mac OS X (the following tutoriel has been tested on OS X Lion). However, except the basicTest in tests/integration, the 
+other tests doesn't run on Mac OS X at the moment.
 
 
 ## Dependencies
