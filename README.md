@@ -114,8 +114,10 @@ Thiw will launch the example code Example.java available in src/examples:
 
 ## Documentation
 
-You will find the javadoc of the Java API of the Trains Protocol in doc/.
+You can generate the javadoc of the Java API of the Trains Protocol in doc/javadoc/.
 The C native code in TrainsProtocol is also documented with doxygen.
+In doc/uml/, UML class diagrams are generated thanks to ObjectAid UML.
+
 
 ## Bibliography
 
