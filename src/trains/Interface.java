@@ -55,7 +55,7 @@ public class Interface {
 	 * @param callbackUtoDeliver
 	 * @return 0 upon successful completion, or -1 if an error occurred
 	 */
-	public native int trInit(int trainsNumber, int wagonLength, int waitNb, int waitTime,
+	private native int trInit(int trainsNumber, int wagonLength, int waitNb, int waitTime,
 			String callbackCircuitChange, 
 			String callbackUtoDeliver);
 
@@ -65,7 +65,7 @@ public class Interface {
 	 * @param status
 	 * @param errnum
 	 */
-	public native void trError_at_line(int status, int errnum);//, const char *filename, 
+	private native void trError_at_line(int status, int errnum);//, const char *filename, 
 	//		unsigned int linenum, const char *format); 
 	
 	
@@ -73,14 +73,14 @@ public class Interface {
 	 * Native function, see {@link #JtrPerror(int) JtrPerror()}
 	 * @param errnum
 	 */
-	public native void trPerror(int errnum);
+	private native void trPerror(int errnum);
 	
 	
 	/**
 	 * Native function, see {@link #JtrTerminate() JtrTerminate()}
 	 * @return always 0
 	 */
-	public native int trTerminate();
+	private native int trTerminate();
 	
 	
 	/**
@@ -89,7 +89,7 @@ public class Interface {
 	 * @param payload
 	 * @return 0 on success
 	 */
-	public native int newmsg(int payloadSize, byte[] payload);
+	private native int newmsg(int payloadSize, byte[] payload);
 	
 	
 	/**
@@ -97,7 +97,7 @@ public class Interface {
 	 * @param msg
 	 * @return 0 on success
 	 */
-	public native int utoBroadcast(Message msg);
+	private native int utoBroadcast(Message msg);
 	
 	
 	/**
