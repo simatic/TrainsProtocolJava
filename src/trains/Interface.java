@@ -126,7 +126,7 @@ public class Interface {
 	 * See {@link #initIDs() initIDs()}.  
 	 */
 	private static native void initIDsMessage();
-	private static native void initIDsCircuitView();
+
 	public native void dumpCountersData(byte[] data);
 	
 	
