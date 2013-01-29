@@ -30,14 +30,14 @@ if [ "$OSName" = "Linux" ]
 then
 	#Compiling on Linux
 	#gcc -I$JAVA_HOME/include -o libInterface.so -shared interface.c
-  export C_INCLUDE_PATH=/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/:/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/linux:.
+  #export C_INCLUDE_PATH=/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/:/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/linux:.
 	make all
 else
 	if [ "$OSName" = "Darwin" ]
 	then
 		echo "compile on Mac OS X"
 		#Ok if we're compiling on Mac OS X 
-    export C_INCLUDE_PATH=/System/Library/Frameworks/JavaVM.framework/Headers:.
+    #export C_INCLUDE_PATH=/System/Library/Frameworks/JavaVM.framework/Headers:.
     make GCCMAKEDEP=$GCCMAKEDEP_USER all
 	fi
 fi

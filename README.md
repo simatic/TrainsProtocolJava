@@ -4,6 +4,9 @@ TrainsProtocolJava
 This is a Java interface for the Trains Protocol designed by Michel Simatic. 
 It uses JNI to call native functions from the [C implementation of the Trains Protocol][TrainsProtocol] (read the [tutoriel][trains-tutoriel]).
 
+Trains protocol is a uniform and totally-ordered broadcast protocol [Défago et al., 2004].
+It is designed to be a throughput-efficient protocol, especially for short messages (100 bytes or lower) [Simatic, 2012].
+
 ## Portability
 
 Because it performs JNI calls to a C library, the Java code is not cross-plateform out of the box.
@@ -11,7 +14,8 @@ Before using the Java interface for the Trains Protocol, the C source code has t
 targeted OS.
 
 So far, the C code for the Trains Protocol has been tested on Linux (Debian and Ubuntu).
-It also runs on Mac OS X (the following tutoriel has been tested on OS X Lion).
+It also runs on Mac OS X (the following tutoriel has been tested on OS X Lion). However, except the basicTest in tests/integration, the 
+other tests doesn't run on Mac OS X at the moment.
 
 
 ## Dependencies
@@ -50,6 +54,12 @@ The native code is a submodule of this git repo:
     ant build-all
 ~~~
 
+You also need to find the jni.h header, which comes along with the JDK (the location depends of your system):
+
+~~~ sh
+    export C_INCLUDE_LIBRARY=/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/linux:.
+    ant
+~~~
 
 
 ### Building on OS X
@@ -60,6 +70,12 @@ The native code is a submodule of this git repo:
     ant build-all
 ~~~
 
+You also need to find the jni.h header, which comes along with the JDK (the location depends of your system):
+
+~~~ sh
+    export C_INCLUDE_LIBRARY=/System/Library/Frameworks/JavaVM.framework/Headers:.
+    ant
+~~~
 
 #### Notes for OS X Lion (10.7)
 
@@ -88,8 +104,7 @@ Calling gccmakedep in the Makefile will fail. Here is a workaround:
 
 ## Setting up the environment for the Trains Protocol:
 
-Create the addr_file at the root directory and follow these [guidelines][addr_file].
-
+Create the addr_file at the root directory and follow these [guidelines][addr_file] or these [ones][addr_file_readme].
 ~~~ sh
     # XX is the port number for the process/machine at which you will launch the protocol
     export TRAINS_PORT=XX
@@ -103,7 +118,21 @@ Thiw will launch the example code Example.java available in src/examples:
 ~~~
 
 
+## Documentation
+
+You can generate the javadoc of the Java API of the Trains Protocol in doc/javadoc/.
+The C native code in TrainsProtocol is also documented with doxygen.
+In doc/uml/, UML class diagrams are generated thanks to ObjectAid UML.
+
+
+## Bibliography
+
+[Défago et al., 2004] Défago, X., Schiper, A. et Urbán, P. (2004). Total order broadcast and multicast algorithms : Taxonomy and survey. ACM Comput. Surv., 36:372?421.
+
+[Simatic, 2012] M. Simatic. Communication et partage de données dans les systèmes répartis (Data communication and data sharing in distributed system, in French). PhD thesis, École Doctorale ÉDITE, October 2012 (available at http://www-public.it-sudparis.eu/~simatic/Recherche/Publications/theseSimatic.pdf).
+
 [trains-tutoriel]: http://www-tp-ext.it-sudparis.eu/~foltz_ar/trainsTutorial.html
 [TrainsProtocol]: https://github.com/simatic/TrainsProtocol 
 [ant]: http://ant.apache.org/
+[addr_file_readme]: https://github.com/simatic/TrainsProtocol#running-an-application-using-trains-protocol
 [addr_file]: http://www-tp-ext.it-sudparis.eu/~foltz_ar/trainsTutorial.html#addr_file
