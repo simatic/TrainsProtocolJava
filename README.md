@@ -50,15 +50,14 @@ The native code is a submodule of this git repo:
 
 ~~~ sh
     export LD_LIBRARY_PATH=TrainsProtocol/lib:LD_LIBRARY_PATH
-    ant help
-    ant build-all
 ~~~
 
 You also need to find the jni.h header, which comes along with the JDK (the location depends of your system):
 
 ~~~ sh
-    export C_INCLUDE_LIBRARY=/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/linux:.
-    ant
+    export C_INCLUDE_PATH=/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/:/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/linux:.
+    ant help
+    ant build-all
 ~~~
 
 
@@ -66,15 +65,13 @@ You also need to find the jni.h header, which comes along with the JDK (the loca
 
 ~~~ sh
     export DYLD_LIBRARY_PATH=TrainsProtocol/lib/:$DYLD_LIBRARY_PATH
-    ant help
-    ant build-all
 ~~~
 
 You also need to find the jni.h header, which comes along with the JDK (the location depends of your system):
 
 ~~~ sh
     export C_INCLUDE_LIBRARY=/System/Library/Frameworks/JavaVM.framework/Headers:.
-    ant
+    ant help
 ~~~
 
 #### Notes for OS X Lion (10.7)
