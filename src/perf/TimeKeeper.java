@@ -1,5 +1,7 @@
 package perf;
 
+import java.util.Vector;
+
 import trains.Interface;
 
 public class TimeKeeper implements Runnable {
@@ -21,7 +23,7 @@ public class TimeKeeper implements Runnable {
 	
 	public static class Builder{
 		//Required parameters
-		private final Interface trin;
+	    private final Interface trin;
 		private final int broadcasters;
 		private final int number;
 		private final int size;
@@ -85,11 +87,16 @@ public class TimeKeeper implements Runnable {
 		InterfaceJNI perfin = InterfaceJNI.perfInterface();
 		
 		try {
+			//System.out.println("warmup");
 			Thread.sleep(this.warmup * 1000);
-			
+			//System.out.println("timeBegins");
+
 			timeBegins = System.nanoTime();
+			//System.out.println("getrusageBegin");
 			perfin.JgetrusageBegin();
+			//System.out.println("JsetcountersBegin");
 			perfin.JsetcountersBegin(trin);
+			//System.out.println("measurment");
 			
 			Thread.sleep(this.measurement * 1000);
 			
@@ -110,8 +117,8 @@ public class TimeKeeper implements Runnable {
 		System.out.println("Time for JtrInit (in sec): " + (this.timeJtrInitEnds - this.timeJtrInitBegins)/1000000000d);
 		System.out.println("Elasped time (in sec): " + (timeEnds - timeBegins)/1000000000d);
 		
-		System.out.println("ru_utime: " + perfin.Jgetru_utime());
-		System.out.println("su_utime: " + perfin.Jgetru_stime());
+		System.out.println("ru_utime: " + perfin.Jgetru_utime()/1000000d);
+		System.out.println("su_utime: " + perfin.Jgetru_stime()/1000000d);
 
 		System.out.println("number of messages delivered to the application: " + perfin.Jgetmessages_delivered());
 		System.out.println("number of bytes delivered to the application: " + perfin.Jgetmessages_bytes_delivered());
@@ -132,6 +139,7 @@ public class TimeKeeper implements Runnable {
 		System.out.println("number of calls to newmsg(): " + perfin.Jgetnewmsg());
 		System.out.println("number of times there was flow control when calling newmsg(): " + perfin.JgetflowControl());
 
+		System.exit(0);
 	}
 	
 	public void setTimeLoadInterfaceBegins(long val){

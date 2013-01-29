@@ -4,12 +4,15 @@ import trains.*;
 
 import java.util.concurrent.Semaphore;
 
+import examples.Example.myCallbackCircuitChange;
+import examples.Example.myCallbackUtoDeliver;
+
 
 public class Perf {
 
 	//static boolean sender;
 	static int broadcasters;
-	static int delayBetweenTwoUtoBroadcast = 10;
+	static int delayBetweenTwoUtoBroadcast = 1; //millis
 	//static int nbRecMsgBeforeStop;
 	static int nbRecMsg = 0;
 	static boolean measurementDone;
@@ -75,8 +78,9 @@ public class Perf {
 
 			nbRecMsg++;
 
-			String content = new String(msg.getPayload());
+			/*String content = new String(msg.getPayload());
 			System.out.println("!!! " + nbRecMsg + "-ieme message (recu de " + sender + " / contenu = " + content + ")");
+		    */
 		}
 	}
 
@@ -122,12 +126,13 @@ public class Perf {
 			e.printStackTrace();
 		}
 
-		TimeKeeper timeKeeper = new TimeKeeper.Builder(2, 2, 10).warmup(1).measurement(1).cooldown(1).build();
 		
-		timeKeeper.setTimeLoadInterfaceBegins(System.nanoTime());	
+		//timeKeeper.setTimeLoadInterfaceBegins(System.nanoTime());	
 		Interface trin = Interface.trainsInterface();
-		timeKeeper.setTimeLoadInterfaceEnds(System.nanoTime());
+		//timeKeeper.setTimeLoadInterfaceEnds(System.nanoTime());
 
+		TimeKeeper timeKeeper = new TimeKeeper.Builder(trin, broadcasters, number, size).warmup(warmup).measurement(measurement).cooldown(cooldown).build();
+	     
 		timeKeeper.setTimeJtrInitBegins(System.nanoTime());
 		
 		exitcode = trin.JtrInit(trainsNumber, wagonLength, waitNb, waitTime,
@@ -185,7 +190,7 @@ public class Perf {
 				}
 			}
 		} 
-		
+		System.out.println("rankMessage: " + rankMessage);
 		System.out.println("** JtrTerminate");
 		exitcode = trin.JtrTerminate();
 		if (exitcode < 0){
@@ -194,6 +199,6 @@ public class Perf {
 		}
 		
 		System.out.println("\n*********************\n");
-		System.exit(0);
+		//System.exit(0);
 	}
 }

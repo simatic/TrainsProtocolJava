@@ -7,7 +7,7 @@ public class Counters {
 	private byte[] data;
 
 	public Counters(){
-		//noting to do
+		this.data = new byte[4096];
 	}
 	
 	public byte[] getData(){

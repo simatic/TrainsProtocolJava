@@ -46,9 +46,14 @@ public class InterfaceJNI {
 	}
 	
 	public void JsetcountersBegin(Interface trin){
+		//System.out.println("begin");
 		Counters countersBegins = new Counters();
+		//System.out.println("dump");
 		trin.dumpCountersData(countersBegins.getData());
+		//System.out.println("set");
 		this.setcountersBegin(countersBegins.getData());
+		//System.out.println("ok");
+
 	}	
 	
 	public void JsetcountersEnd(Interface trin){
