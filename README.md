@@ -46,7 +46,8 @@ The native code is a submodule of this git repo:
 
 ~~~ sh
     export LD_LIBRARY_PATH=TrainsProtocol/lib:LD_LIBRARY_PATH
-    ant
+    ant help
+    ant build-all
 ~~~
 
 
@@ -55,7 +56,8 @@ The native code is a submodule of this git repo:
 
 ~~~ sh
     export DYLD_LIBRARY_PATH=TrainsProtocol/lib/:$DYLD_LIBRARY_PATH
-    ant
+    ant help
+    ant build-all
 ~~~
 
 
@@ -79,7 +81,8 @@ Calling gccmakedep in the Makefile will fail. Here is a workaround:
     
     # Locate gccmakedep (which should be installed with your custom installed version of make)
     export GCCMAKEDEP_USER=/opt/local/bin/gcc
-    ant
+    ant help
+    ant build-all
 ~~~ 
 
 
@@ -95,7 +98,8 @@ Create the addr_file at the root directory and follow these [guidelines][addr_fi
 Thiw will launch the example code Example.java available in src/examples: 
 
 ~~~ sh
-    ant run
+    ant help
+    ant run-example
 ~~~
 
 
