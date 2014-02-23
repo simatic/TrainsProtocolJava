@@ -31,14 +31,19 @@ then
 	#Compiling on Linux
 	#gcc -I$JAVA_HOME/include -o libInterface.so -shared interface.c
   #export C_INCLUDE_PATH=/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/:/usr/lib/jvm/java-1.7.0-openjdk-amd64/include/linux:.
-	make all
+	make allForJNI
 else
 	if [ "$OSName" = "Darwin" ]
 	then
 		echo "compile on Mac OS X"
 		#Ok if we're compiling on Mac OS X 
-    #export C_INCLUDE_PATH=/System/Library/Frameworks/JavaVM.framework/Headers:.
-    make GCCMAKEDEP=$GCCMAKEDEP_USER all
+                #export C_INCLUDE_PATH=/System/Library/Frameworks/JavaVM.framework/Headers:.
+                # NB : Thanks to the use of "gcc -M" in TrainsProtocol 
+                # makefiles, there is no more difference between Linux and
+                # Mac OS X compilation. Neveretheless, we keep the test
+                # to know on which OS we are compiling, just in case we would
+                # need it.
+                make allForJNI
 	fi
 fi
 
