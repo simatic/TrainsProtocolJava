@@ -111,7 +111,7 @@ Thiw will launch the example code Example.java available in src/examples:
 
 ~~~ sh
     ant help
-    ant run-example
+    ant run-examples
 ~~~
 
 

@@ -19,16 +19,16 @@
     <echo></echo>
     <echo>Building: </echo>
     <echo>    * build          - compile trains package and build the jar file TrainsProtocol.jar</echo>
-    <echo>    * build-example - compile the examples package (needs the TrainsProtocol.jar file) </echo>
+    <echo>    * build-examples - compile the examples package (needs the TrainsProtocol.jar file) </echo>
     <echo>    * build-perf     - compile the perf package (needs the TrainsProtocol.jar file)</echo>
     <echo>    * build-all      - compile all the source code and build the jar file TrainsProtocol.jar</echo>
     <echo></echo>
     <echo>Building and running examples:</echo>
-    <echo>    * example       - build the examples package and run examples/Example.java</echo>
-    <echo>    * perf           - build the perf packahe and run perf/Perf.java</echo>
+    <echo>    * examples       - build the examples package and run examples/Example.java</echo>
+    <echo>    * perf           - build the perf package and run perf/Perf.java</echo>
     <echo></echo>
     <echo>Running examples:</echo>
-    <echo>    * run-example    - run the examples/Example.java</echo>
+    <echo>    * run-examples    - run the examples/Example.java</echo>
     <echo>    * run-perf       - run the perf/Perf.java</echo>
     <echo></echo>
     <echo></echo>
