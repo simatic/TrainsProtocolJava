@@ -138,6 +138,8 @@ public class TimeKeeper implements Runnable {
 		System.out.println("number of bytes written by commWritev() calls: " + perfin.Jgetcomm_writev_bytes());
 		System.out.println("number of calls to newmsg(): " + perfin.Jgetnewmsg());
 		System.out.println("number of times there was flow control when calling newmsg(): " + perfin.JgetflowControl());
+		
+		System.out.println("\nBroadcasters / number / size / ntr / Average number of delivered wagons per recent train received / Average number of msg per wagon / Throughput of uto-broadcasts in Mbps ; "+broadcasters+" ; "+number+" ; "+size+" ; ?ntr ; "+perfin.Jgetwagons_delivered()/perfin.Jgetrecent_trains_received()+" ; "+perfin.Jgetmessages_delivered()/perfin.Jgetwagons_delivered()+" ; "+perfin.Jgetmessages_bytes_delivered()/((timeEnds - timeBegins)/1000000000d)+"\n");
 
 		System.exit(0);
 	}

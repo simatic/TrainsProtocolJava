@@ -51,7 +51,7 @@ if [ ! -d ../lib ]
 then
 	mkdir ../lib
 fi
-mv libtrains.* ../lib
+#mv libtrains.* ../lib
 
 # update LD_LIBARAY_PATH which is also java.library.path
 LibPath=$(cd ../lib; pwd)

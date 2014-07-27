@@ -84,7 +84,31 @@ public class Perf {
 		}
 	}
 
-	public static void main(String args[]) {	
+	public static void main(String args[]) {
+	
+	    //Trying to use environment variables to get the values of the parameters for a use of a script for the perf tests
+
+	    /*	String nomBroadcaster = System.getenv("BROADCASTERS");
+		String nomWarmup = System.getenv("WARMUP");
+		String nomCooldown = System.getenv("COOLDOWN");
+		String nomMeasurement = System.getenv("MEASUREMENT");
+		String nomNumber = System.getenv("NUMBER");
+		String nomSize = System.getenv("SIZE");
+
+		if(nomBroadcaster == null || nomWarmup == null || nomCooldown == null || nomMeasurement == null || nomNumber == null || nomSize == null){
+			System.out.println("### Wrong parameters ! ###");
+			System.out.println("You need to set the following environment variables correctly : BROADCASTERS, WARMUP, COOLDOWN, MEASUREMENT, NUMBER, SIZE, NTRAINS");
+			System.exit(1);
+		} else {
+			System.out.println("### Correct parameters ! ###");
+			}
+		
+		broadcasters = Integer.parseInt(nomBroadcaster);
+		int warmup = Integer.parseInt(nomWarmup);
+		int cooldown = Integer.parseInt(nomCooldown);
+		int measurement = Integer.parseInt(nomMeasurement);
+		int number = Integer.parseInt(nomNumber);
+		int size = Integer.parseInt(nomSize);*/
 
 		//trInit parameters: values by default
 		int trainsNumber = 0;
