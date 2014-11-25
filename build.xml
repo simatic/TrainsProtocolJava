@@ -111,6 +111,8 @@
 	  	classpath="${bin}:."
 	    failonerror="true"
 	    classname="examples.Example">
+ 	    <sysproperty key="java.library.path" path="TrainsProtocol/lib"/>
+	    <env key="TRAINS_HOST" value="localhost"/>
 	  </java>
   </target>
 
@@ -119,6 +121,8 @@
       classpath="${bin}:."
 	  failonerror="true"
 	  classname="perf.Perf">
+ 	    <sysproperty key="java.library.path" path="TrainsProtocol/lib"/>
+	    <env key="TRAINS_HOST" value="localhost"/>
      </java>
   </target>
 	
