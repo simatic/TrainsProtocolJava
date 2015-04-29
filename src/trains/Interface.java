@@ -46,18 +46,20 @@ public class Interface {
 	
 	
 	/**
-	 * Native function, see {@link Interface#trInit(int, int, int, int, String, String) JtrInit()}
+	 * Native function, see {@link Interface#trInit(int, int, int, int, String, String, int) JtrInit()}
 	 * @param trainsNumber
 	 * @param wagonLength
 	 * @param waitNb
 	 * @param waitTime
 	 * @param callbackCircuitChange
-	 * @param callbackUtoDeliver
+	 * @param callbackODeliver
+	 * @param reqOrder
 	 * @return 0 upon successful completion, or -1 if an error occurred
 	 */
 	private native int trInit(int trainsNumber, int wagonLength, int waitNb, int waitTime,
 			String callbackCircuitChange, 
-			String callbackUtoDeliver);
+			String callbackODeliver,
+			int reqOrder);
 
 	
 	/**
@@ -93,11 +95,12 @@ public class Interface {
 	
 	
 	/**
-	 * Native function, see {@link #JutoBroadcast(Message) JutoBroadcast()}.
+	 * Native function, see {@link #JoBroadcast(char,Message) JoBroadcast()}.
+	 * @param messageTyp
 	 * @param msg
 	 * @return 0 on success
 	 */
-	private native int utoBroadcast(Message msg);
+        private native int oBroadcast(char messageTyp, Message msg);
 	
 	
 	/**
@@ -216,16 +219,18 @@ public class Interface {
 	 * @param waitNb the number of time to wait; when set to 0, uses the default value 10
 	 * @param waitTime time to wait (in microsecond); when set to 0, uses the default value 2
 	 * @param callbackCircuitChange name of the callback class to be called when there is a circuit change (Arrival or departure of a process)
-	 * @param callbackUtoDeliver name of the callback class be called when a message can be uto-delivered by the trains protocol
+	 * @param callbackODeliver name of the callback class be called when a message can be o-delivered by the trains protocol
+	 * @param reqOrder Order guarantees which Trains algorithm must provide while it is running (must be 0 for CAUSAL_ORDER, 1 for TOTA_ORDER, or 2 for UNIFORM_TOTAL_ORDER)
 	 * 
 	 * @return 0 upon successful completion, or -1 if an error occurred
 	 */
 	public int JtrInit(int trainsNumber, int wagonLength, int waitNb, int waitTime,
 			String callbackCircuitChange, 
-			String callbackUtoDeliver){
+		        String callbackODeliver,
+			int reqOrder){
 		
 		int exitcode = this.trInit(trainsNumber, wagonLength, waitNb, waitTime,
-				callbackCircuitChange, callbackUtoDeliver);	
+					   callbackCircuitChange, callbackODeliver, reqOrder);	
 
 		return exitcode;
 	}
@@ -283,11 +288,12 @@ public class Interface {
 	/**
 	 * Sends the message previously allocated on the train by newmsg.
 	 * 
+	 * @param messageTyp This parameter is a field greater or equal to 5 which can be used by the application  arbitrarily. The intent is that it could be used to name different kinds of data messages so they can be differentiated without looking into the body of the message.
 	 * @param msg message to be sent
 	 * @return 0 on success
 	 */
-	public int JutoBroadcast(Message msg){
-		int exitcode = this.utoBroadcast(msg);			
+       public int JoBroadcast(char messageTyp, Message msg){
+	        int exitcode = this.oBroadcast(messageTyp, msg);
 		return exitcode;
 	}
 	

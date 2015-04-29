@@ -5,20 +5,23 @@ import trains.*;
 import java.util.concurrent.Semaphore;
 
 import examples.Example.myCallbackCircuitChange;
-import examples.Example.myCallbackUtoDeliver;
+import examples.Example.myCallbackODeliver;
 
 
 public class Perf {
 
 	//static boolean sender;
 	static int broadcasters;
-	static int delayBetweenTwoUtoBroadcast = 1; //millis
+	static int delayBetweenTwoOBroadcast = 1; //millis
 	//static int nbRecMsgBeforeStop;
 	static int nbRecMsg = 0;
 	static boolean measurementDone;
 
 	static Semaphore semWaitEnoughMembers;
 
+        /* Messages number */
+        static final char TEST_MESSAGE = 5; /* First message always has number 5 */
+	
 	public static class myCallbackCircuitChange implements CallbackCircuitChange{
 
 		private static final myCallbackCircuitChange CIRCUITCHANGE = new myCallbackCircuitChange();
@@ -55,26 +58,26 @@ public class Perf {
 
 			System.out.println(cv.getMemb() + " // " + broadcasters);
 			if (cv.getMemb() >= broadcasters){
-				System.out.println("!!! ******** enough members to start utoBroadcasting\n");
+				System.out.println("!!! ******** enough members to start oBroadcasting\n");
 				semWaitEnoughMembers.release();
 			}
 		}
 	}
 
-	public static class myCallbackUtoDeliver implements CallbackUtoDeliver{
+	public static class myCallbackODeliver implements CallbackODeliver{
 
-		private static final myCallbackUtoDeliver UTODELIVER = new myCallbackUtoDeliver();
+		private static final myCallbackODeliver ODELIVER = new myCallbackODeliver();
 
-		public myCallbackUtoDeliver(){
+		public myCallbackODeliver(){
 			//Nothing to do
 		} 
 
-		public static myCallbackUtoDeliver getInstance(){
-			return UTODELIVER;
+		public static myCallbackODeliver getInstance(){
+			return ODELIVER;
 		}
 
 		@Override
-		public void run(int sender, Message msg){
+		public void run(int sender, char messageTyp, Message msg){
 
 			nbRecMsg++;
 
@@ -116,6 +119,8 @@ public class Perf {
 		int waitNb = 0;
 		int waitTime = 0;
 
+		char reqOrder = 2; 
+
 		byte[] payload = null;
 		int rankMessage = 0;
 		Message msg = null;
@@ -140,7 +145,7 @@ public class Perf {
 		//Callback
 		myCallbackCircuitChange mycallbackCC = myCallbackCircuitChange.getInstance();
 		mycallbackCC.setId(1);
-		myCallbackUtoDeliver mycallbackUto = myCallbackUtoDeliver.getInstance();
+		myCallbackODeliver mycallbackO = myCallbackODeliver.getInstance();
 
 
 		try {
@@ -161,7 +166,8 @@ public class Perf {
 		
 		exitcode = trin.JtrInit(trainsNumber, wagonLength, waitNb, waitTime,
 				myCallbackCircuitChange.class.getName(), 
-				myCallbackUtoDeliver.class.getName());
+				myCallbackODeliver.class.getName(),
+				reqOrder);
 		
 		timeKeeper.setTimeJtrInitEnds(System.nanoTime());
 
@@ -199,15 +205,15 @@ public class Perf {
 
 				rankMessage++;
 
-				exitcode = trin.JutoBroadcast(msg);
+				exitcode = trin.JoBroadcast(TEST_MESSAGE, msg);
 				if (exitcode < 0){
-					System.out.println("JutoBroadcast failed.");
+					System.out.println("JoBroadcast failed.");
 					return;
 				}
 
 
 				try {
-					Thread.sleep(delayBetweenTwoUtoBroadcast);
+					Thread.sleep(delayBetweenTwoOBroadcast);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

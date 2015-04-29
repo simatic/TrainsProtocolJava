@@ -33,14 +33,15 @@ package trains;
  *
  */
 
-public interface CallbackUtoDeliver {
+public interface CallbackODeliver {
 	//Important: need to implement a static factory getInstance()
 
 	/**
 	 * Method implemented by the Java user and called from the native code.
 	 * 
 	 * @param sender sender of the message
+	 * @param messageTyp Message typ of this message
 	 * @param msg application message (see {@link trains.Message Message}
 	 */
-	public void run(int sender, Message msg);
+         public void run(int sender, char messageTyp, Message msg);
 }

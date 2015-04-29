@@ -74,7 +74,7 @@
   <target name="build-trains" description="Build trains jar">
     <javac srcdir="${trains}"
  	   destdir="${bin}"
-  	   includes="CallbackCircuitChange.java, CallbackUtoDeliver.java, CircuitView.java, Counters.java,
+  	   includes="CallbackCircuitChange.java, CallbackODeliver.java, CircuitView.java, Counters.java,
   					Interface.java, Message.java, MessageHeader.java, MessageType.java"/>
     <exec dir="." executable="/bin/sh">
       <arg line="script.sh"/>

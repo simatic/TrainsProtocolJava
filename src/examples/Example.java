@@ -38,14 +38,14 @@ import java.util.concurrent.Semaphore;
 
 public class Example {
 
-	/* Set to true if the user wants the process to utoBrodcast messages. */
+	/* Set to true if the user wants the process to oBrodcast messages. */
 	static boolean sender;
 	
-	/* Minimum number of members in the protocol before starting to utoBroadcast */
+	/* Minimum number of members in the protocol before starting to oBroadcast */
 	static int nbMemberMin;
 	
-	/* Minimum delay in microseconds between 2 utoBroadcasts by the same process */ 
-	static int delayBetweenTwoUtoBroadcast;
+	/* Minimum delay in microseconds between 2 oBroadcasts by the same process */ 
+	static int delayBetweenTwoOBroadcast;
 	
 	/* Minimum numer of messages to be received before process stops */
 	static int nbRecMsgBeforeStop;
@@ -62,6 +62,8 @@ public class Example {
 	/* Semaphore used to know when to terminate the protocol */
 	static Semaphore semWaitToDie;
 
+        /* Messages number */
+        static final char TEST_MESSAGE = 5; /* First message always has number 5 */
 	
 	/* User's CallbackCircuitChange */
 	public static class myCallbackCircuitChange implements CallbackCircuitChange{
@@ -106,7 +108,7 @@ public class Example {
 			/* Checking if there is enough members to start sending messages */
 			System.out.println(cv.getMemb() + " // " + nbMemberMin);
 			if (cv.getMemb() >= nbMemberMin){
-				System.out.println("!!! ******** enough members to start utoBroadcasting\n");
+				System.out.println("!!! ******** enough members to start oBroadcasting\n");
 				semWaitEnoughMembers.release();
 			}
 			
@@ -118,24 +120,24 @@ public class Example {
 	}
 
 	
-	/* User's CallbackUtoDeliver */
-	public static class myCallbackUtoDeliver implements CallbackUtoDeliver{
+	/* User's CallbackODeliver */
+	public static class myCallbackODeliver implements CallbackODeliver{
 
 		/* Singleton */
-		private static final myCallbackUtoDeliver UTODELIVER = new myCallbackUtoDeliver();
+		private static final myCallbackODeliver ODELIVER = new myCallbackODeliver();
 	
-		public myCallbackUtoDeliver(){
+		public myCallbackODeliver(){
 			//Nothing to do
 		} 
 		
 		/* Mandatory static factory getInstance()*/
-		public static myCallbackUtoDeliver getInstance(){
-			return UTODELIVER;
+		public static myCallbackODeliver getInstance(){
+			return ODELIVER;
 		}
 
 		/* The method called from the native code */
 		@Override
-		public void run(int sender, Message msg){
+		public void run(int sender, char messageTyp, Message msg){
       
 			/* Receiving a fixed number of messages */
 			nbRecMsg++;
@@ -146,7 +148,7 @@ public class Example {
 			
 			/* Getting and printing the content of the message */
 			String content = new String(msg.getPayload());
-			System.out.println("!!! " + nbRecMsg + "-ieme message (recu de " + sender + " / contenu = " + content + ")");
+			System.out.println("!!! " + nbRecMsg + "-ieme message (recu de " + sender + " / messageTyp = " + (int)messageTyp + " / contenu = " + content + ")");
 		}
 	}
 
@@ -172,7 +174,7 @@ public class Example {
 		/* Test parameters */
 		sender = true;
 		nbMemberMin = 3;
-		delayBetweenTwoUtoBroadcast = 1000;
+		delayBetweenTwoOBroadcast = 1000;
 		nbRecMsgBeforeStop = 10;
 		terminate = false;
 
@@ -183,7 +185,7 @@ public class Example {
 		/* Callbacks */
 		myCallbackCircuitChange mycallbackCC = myCallbackCircuitChange.getInstance();
 		mycallbackCC.setId(1);
-		myCallbackUtoDeliver mycallbackUto = myCallbackUtoDeliver.getInstance();
+		myCallbackODeliver mycallbackO = myCallbackODeliver.getInstance();
 
 		
 		try {
@@ -200,7 +202,8 @@ public class Example {
 		System.out.println("** trInit");
 		exitcode = trin.JtrInit(trainsNumber, wagonLength, waitNb, waitTime,
 				myCallbackCircuitChange.class.getName(), 
-				myCallbackUtoDeliver.class.getName());
+				myCallbackODeliver.class.getName(),
+				2 /* UNIFORM_TOTAL_ORDER */ );
 
 		if (exitcode < 0){
 			System.out.println("JtrInit failed.");
@@ -241,14 +244,14 @@ public class Example {
 				rankMessage++;
 
 				/* Broadcasting the message */
-				exitcode = trin.JutoBroadcast(msg);
+				exitcode = trin.JoBroadcast(TEST_MESSAGE, msg);
 				if (exitcode < 0){
-					System.out.println("JutoBroadcast failed.");
+					System.out.println("oBroadcast failed.");
 					return;
 				}
 
 				try {
-					Thread.sleep(delayBetweenTwoUtoBroadcast);
+					Thread.sleep(delayBetweenTwoOBroadcast);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

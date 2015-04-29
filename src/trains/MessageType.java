@@ -48,7 +48,7 @@ public enum MessageType {
 	AM_DEPARTURE,
 	
 	/**
-	 * Type of message used internally by utoDeliveries to exit its main loop
+	 * Type of message used internally by oDeliveries to exit its main loop
 	 */
 	AM_TERMINATE,	
 	
